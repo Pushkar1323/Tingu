@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 Dosa Dipping Game - For My Cutie</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>🎮 Dosa Love Game - For My Cutie 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -18,6 +18,7 @@
             --text-primary: #8b4513;
             --text-secondary: #666;
             --card-bg: #ffffff;
+            --glow: rgba(255, 107, 107, 0.3);
         }
 
         [data-theme="dark"] {
@@ -26,6 +27,7 @@
             --text-primary: #ffd700;
             --text-secondary: #b8b8d1;
             --card-bg: #2d2d5a;
+            --glow: rgba(255, 215, 0, 0.3);
         }
 
         body {
@@ -34,6 +36,38 @@
             min-height: 100vh;
             overflow-x: hidden;
             transition: all 0.5s ease;
+        }
+
+        /* Floating Hearts Background */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            animation: floatHeart 15s infinite linear;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         /* Controls */
@@ -47,8 +81,8 @@
         }
 
         .control-btn {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             border: none;
             cursor: pointer;
@@ -57,7 +91,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
         }
 
         .music-btn {
@@ -65,12 +99,17 @@
         }
 
         .music-btn.playing {
-            animation: rotate 3s linear infinite;
+            animation: pulse 1s infinite, glow 2s infinite;
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px #ff6b6b; }
+            50% { box-shadow: 0 0 40px #feca57; }
         }
 
         .theme-btn {
@@ -78,7 +117,7 @@
         }
 
         .control-btn:hover {
-            transform: scale(1.15);
+            transform: scale(1.2) rotate(10deg);
         }
 
         /* Header */
@@ -86,500 +125,988 @@
             text-align: center;
             padding: 2rem;
             background: var(--bg-secondary);
-            border-bottom: 3px dashed var(--text-primary);
+            border-bottom: 4px dashed var(--text-primary);
+            position: relative;
+            z-index: 1;
         }
 
         .header h1 {
-            font-size: 2.5rem;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            font-size: 2.8rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #ff6b6b);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientText 3s ease infinite;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        @keyframes gradientText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .header p {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
         }
 
-        /* Score Board */
-        .score-board {
+        .header .heart {
+            display: inline-block;
+            animation: heartbeat 1s infinite;
+            color: #ff6b6b;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Love Meter */
+        .love-meter-container {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .love-meter {
+            width: 40px;
+            height: 200px;
+            background: var(--card-bg);
+            border-radius: 25px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .love-meter-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, #ff6b6b, #ff9a9e, #fecfef);
+            transition: height 0.5s ease;
+            border-radius: 0 0 25px 25px;
+        }
+
+        .love-meter-label {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            color: var(--text-primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .love-meter-heart {
+            font-size: 1.5rem;
+            animation: heartbeat 1s infinite;
+        }
+
+        /* Stats Board */
+        .stats-board {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            padding: 1rem;
+            gap: 1.5rem;
+            padding: 1.5rem;
             background: var(--card-bg);
             margin: 1rem 2rem;
-            border-radius: 20px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-radius: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
 
-        .score-item {
+        .stat-item {
             text-align: center;
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            min-width: 120px;
+            transition: transform 0.3s ease;
         }
 
-        .score-item .label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        .stat-item:hover {
+            transform: translateY(-5px);
         }
 
-        .score-item .value {
+        .stat-item .icon {
             font-size: 2rem;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-item .label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-item .value {
+            font-size: 1.8rem;
             font-weight: 800;
             color: var(--text-primary);
         }
 
-        /* Game Container */
-        .game-container {
+        /* Combo Display */
+        .combo-display {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .combo-display.show {
+            opacity: 1;
+            animation: comboPop 0.5s ease;
+        }
+
+        @keyframes comboPop {
+            0% { transform: translateX(-50%) scale(0.5); }
+            50% { transform: translateX(-50%) scale(1.2); }
+            100% { transform: translateX(-50%) scale(1); }
+        }
+
+        /* Achievement Badge */
+        .achievement {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #ffd700, #ffb700);
+            color: #8b4513;
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4);
+            z-index: 2000;
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .achievement.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .achievement .badge-icon {
+            font-size: 2rem;
+        }
+
+        /* Dosa Selector */
+        .dosa-selector {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin: 1.5rem 1rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dosa-type-btn {
+            padding: 0.8rem 1.2rem;
+            border: 3px solid transparent;
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dosa-type-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .dosa-type-btn:hover::before {
+            left: 100%;
+        }
+
+        .dosa-type-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .dosa-type-btn.active {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            border-color: transparent;
+            transform: scale(1.05);
+        }
+
+        .dosa-type-btn .emoji {
+            font-size: 1.2rem;
+            margin-right: 0.3rem;
+        }
+
+        /* Game Area */
+        .game-area {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 2rem;
-            min-height: 70vh;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Dosa Plate */
-        .dosa-plate {
+        /* Banana Leaf Plate */
+        .banana-leaf-plate {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 350px;
+            height: 350px;
             margin-bottom: 2rem;
         }
 
-        .plate {
+        .banana-leaf {
             width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at center, #e8e8e8 0%, #c0c0c0 50%, #a0a0a0 100%);
-            border-radius: 50%;
+            background: linear-gradient(135deg, #228b22 0%, #32cd32 30%, #228b22 50%, #006400 100%);
+            border-radius: 45% 55% 50% 50% / 50% 50% 50% 50%;
             box-shadow: 
-                0 10px 30px rgba(0,0,0,0.3),
-                inset 0 5px 15px rgba(255,255,255,0.5),
-                inset 0 -5px 15px rgba(0,0,0,0.2);
+                0 15px 40px rgba(0,0,0,0.3),
+                inset 0 0 60px rgba(0,100,0,0.3);
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        /* Dosa */
-        .dosa {
-            width: 220px;
-            height: 120px;
-            background: linear-gradient(180deg, #d4a574 0%, #c4955a 30%, #b8864d 60%, #a67540 100%);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            cursor: grab;
             position: relative;
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.3),
-                inset 0 -5px 15px rgba(0,0,0,0.2),
-                inset 0 5px 10px rgba(255,255,255,0.3);
-            transition: transform 0.1s ease;
-            user-select: none;
-            z-index: 100;
+            overflow: hidden;
         }
 
-        .dosa:active {
-            cursor: grabbing;
-            transform: scale(1.05);
+        /* Leaf veins */
+        .banana-leaf::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(0,100,0,0.5), transparent);
+            transform: translateY(-50%);
         }
 
-        .dosa.dragging {
-            cursor: grabbing;
-            transform: scale(1.1);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-            z-index: 1000;
-        }
-
-        /* Dosa Texture - Crispy dots */
-        .dosa::before {
+        .banana-leaf::after {
             content: '';
             position: absolute;
             top: 10%;
-            left: 10%;
-            width: 80%;
+            left: 50%;
+            width: 3px;
             height: 80%;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
-                radial-gradient(circle at 60% 20%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
-                radial-gradient(circle at 80% 50%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
-                radial-gradient(circle at 30% 70%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
-                radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
-                radial-gradient(circle at 50% 50%, rgba(139, 69, 19, 0.3) 2px, transparent 2px);
-            border-radius: inherit;
+            background: linear-gradient(180deg, transparent, rgba(0,100,0,0.5), transparent);
+            transform: translateX(-50%);
         }
 
-        /* Crispy edges */
-        .dosa::after {
-            content: '';
+        /* Side veins */
+        .leaf-veins {
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            border-radius: inherit;
-            border: 3px solid rgba(139, 69, 19, 0.4);
-            border-style: dashed;
+            pointer-events: none;
         }
 
-        /* Filling indicator */
-        .dosa .filling {
+        .leaf-veins::before,
+        .leaf-veins::after {
+            content: '';
             position: absolute;
-            bottom: 5px;
+            width: 40%;
+            height: 2px;
+            background: rgba(0,100,0,0.3);
+        }
+
+        .leaf-veins::before {
+            top: 30%;
+            left: 20%;
+            transform: rotate(20deg);
+        }
+
+        .leaf-veins::after {
+            top: 70%;
+            left: 20%;
+            transform: rotate(-20deg);
+        }
+
+        /* Dosa on plate */
+        .dosa-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        .dosa {
+            width: 200px;
+            height: 110px;
+            background: linear-gradient(
+                180deg, 
+                #e8c49a 0%, 
+                #d4a574 20%, 
+                #c4955a 40%, 
+                #b8864d 60%, 
+                #a67540 80%,
+                #8b6235 100%
+            );
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            cursor: grab;
+            position: relative;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.3),
+                inset 0 -8px 20px rgba(0,0,0,0.3),
+                inset 0 8px 15px rgba(255,255,255,0.2);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .dosa:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 15px 40px rgba(0,0,0,0.4),
+                inset 0 -8px 20px rgba(0,0,0,0.3),
+                inset 0 8px 15px rgba(255,255,255,0.2);
+        }
+
+        .dosa:active, .dosa.dragging {
+            cursor: grabbing;
+            transform: scale(1.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        /* Dosa crispy texture */
+        .dosa::before {
+            content: '';
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            width: 70%;
+            height: 70%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(139, 69, 19, 0.4) 3px, transparent 3px),
+                radial-gradient(circle at 45% 15%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
+                radial-gradient(circle at 75% 35%, rgba(139, 69, 19, 0.4) 3px, transparent 3px),
+                radial-gradient(circle at 25% 55%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
+                radial-gradient(circle at 65% 65%, rgba(139, 69, 19, 0.4) 3px, transparent 3px),
+                radial-gradient(circle at 85% 75%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
+                radial-gradient(circle at 35% 85%, rgba(139, 69, 19, 0.4) 3px, transparent 3px),
+                radial-gradient(circle at 55% 45%, rgba(139, 69, 19, 0.2) 4px, transparent 4px);
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        /* Dosa golden edges */
+        .dosa::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 5%;
+            right: 5%;
+            height: 20%;
+            background: linear-gradient(180deg, rgba(255,215,0,0.2), transparent);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            pointer-events: none;
+        }
+
+        /* Filling badge */
+        .dosa .filling-badge {
+            position: absolute;
+            bottom: -10px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.8rem;
-            background: rgba(255,255,255,0.9);
-            padding: 2px 10px;
-            border-radius: 10px;
-            color: #8b4513;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-
-        /* Dosa Types Selector */
-        .dosa-selector {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            padding: 0 1rem;
-        }
-
-        .dosa-type-btn {
-            padding: 0.8rem 1.5rem;
-            border: 3px solid var(--text-primary);
-            background: var(--card-bg);
-            color: var(--text-primary);
-            border-radius: 30px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
-
-        .dosa-type-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .dosa-type-btn.active {
-            background: var(--text-primary);
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
             color: white;
+            padding: 4px 15px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
         }
 
-        [data-theme="dark"] .dosa-type-btn.active {
-            color: #1a1a2e;
+        /* Steam Effect */
+        .steam-container {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 50px;
+            pointer-events: none;
         }
 
-        /* Chutney & Sambar Section */
+        .steam {
+            position: absolute;
+            background: rgba(255,255,255,0.6);
+            border-radius: 50%;
+            animation: steam 2s infinite ease-out;
+            opacity: 0;
+        }
+
+        .steam:nth-child(1) {
+            width: 15px;
+            height: 15px;
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .steam:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 50%;
+            animation-delay: 0.5s;
+        }
+
+        .steam:nth-child(3) {
+            width: 12px;
+            height: 12px;
+            left: 75%;
+            animation-delay: 1s;
+        }
+
+        @keyframes steam {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-40px) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Bite marks on dosa */
+        .bite-mark {
+            position: absolute;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+            pointer-events: none;
+        }
+
+        /* Dipping Section */
         .dipping-section {
             display: flex;
             justify-content: center;
             gap: 2rem;
             flex-wrap: wrap;
-            padding: 2rem;
+            padding: 2.5rem;
             background: var(--bg-secondary);
-            border-radius: 30px;
+            border-radius: 40px;
             margin: 1rem;
             width: 100%;
-            max-width: 900px;
+            max-width: 950px;
+            box-shadow: 
+                0 -10px 40px rgba(0,0,0,0.1),
+                inset 0 5px 20px rgba(255,255,255,0.5);
         }
 
         .dipping-section h3 {
             width: 100%;
             text-align: center;
             color: var(--text-primary);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        /* Bowl */
+        .dipping-section h3 .arrow {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        /* Bowl Styles */
         .bowl {
             display: flex;
             flex-direction: column;
             align-items: center;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .bowl:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) translateY(-5px);
         }
 
         .bowl.dipping {
-            animation: dip 0.5s ease;
+            animation: dipBowl 0.6s ease;
         }
 
-        @keyframes dip {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+        @keyframes dipBowl {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.2); }
+            60% { transform: scale(0.95); }
+            100% { transform: scale(1); }
         }
 
         .bowl-container {
-            width: 120px;
-            height: 80px;
+            width: 110px;
+            height: 75px;
             position: relative;
+            perspective: 500px;
+        }
+
+        .bowl-3d {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg);
         }
 
         .bowl-outer {
             width: 100%;
             height: 100%;
-            background: #8b4513;
-            border-radius: 10px 10px 50% 50%;
+            background: linear-gradient(180deg, #a0522d 0%, #8b4513 50%, #654321 100%);
+            border-radius: 15px 15px 50% 50%;
             position: relative;
             box-shadow: 
-                0 8px 20px rgba(0,0,0,0.3),
-                inset 0 -10px 20px rgba(0,0,0,0.3);
+                0 10px 25px rgba(0,0,0,0.35),
+                inset 0 -15px 25px rgba(0,0,0,0.4),
+                inset 0 5px 10px rgba(255,255,255,0.1);
             overflow: hidden;
         }
 
         .bowl-inner {
             position: absolute;
-            top: 10px;
+            top: 12px;
             left: 10px;
             right: 10px;
-            bottom: 5px;
-            border-radius: 5px 5px 50% 50%;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
+            bottom: 8px;
+            border-radius: 10px 10px 50% 50%;
+            overflow: hidden;
         }
 
-        /* Chutney Colors */
-        .coconut .bowl-inner {
-            background: linear-gradient(180deg, #f5f5dc 0%, #e8e4c9 50%, #ddd8b8 100%);
+        /* Liquid with wave effect */
+        .liquid {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 90%;
+            border-radius: 0 0 50% 50%;
         }
 
-        .tomato .bowl-inner {
-            background: linear-gradient(180deg, #ff6347 0%, #dc143c 50%, #b22222 100%);
-        }
-
-        .pudina .bowl-inner {
-            background: linear-gradient(180deg, #32cd32 0%, #228b22 50%, #006400 100%);
-        }
-
-        .sambar .bowl-inner {
-            background: linear-gradient(180deg, #d2691e 0%, #cd853f 30%, #8b4513 100%);
-        }
-
-        /* Sambar special - bigger bowl */
-        .sambar .bowl-container {
-            width: 150px;
-            height: 100px;
-        }
-
-        /* Liquid effect */
-        .bowl-inner::before {
+        .liquid::before {
             content: '';
             position: absolute;
-            top: 5px;
-            left: 10%;
-            width: 30%;
-            height: 10px;
-            background: rgba(255,255,255,0.4);
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 15px;
+            background: inherit;
+            filter: brightness(1.2);
+            animation: wave 2s infinite ease-in-out;
             border-radius: 50%;
         }
 
-        /* Floating items in sambar */
-        .sambar .bowl-inner::after {
+        @keyframes wave {
+            0%, 100% { transform: translateX(-5px) skewX(-5deg); }
+            50% { transform: translateX(5px) skewX(5deg); }
+        }
+
+        /* Liquid shine */
+        .liquid::after {
             content: '';
             position: absolute;
+            top: 10px;
+            left: 15%;
+            width: 35%;
+            height: 12px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            filter: blur(2px);
+        }
+
+        /* Chutney colors */
+        .coconut .liquid {
+            background: linear-gradient(180deg, #f5f5dc 0%, #e8e4c9 50%, #d4d0b5 100%);
+        }
+
+        .tomato .liquid {
+            background: linear-gradient(180deg, #ff6347 0%, #dc143c 50%, #b22222 100%);
+        }
+
+        .pudina .liquid {
+            background: linear-gradient(180deg, #32cd32 0%, #228b22 50%, #006400 100%);
+        }
+
+        .sambar .liquid {
+            background: linear-gradient(180deg, #e07020 0%, #cd6a30 50%, #a55020 100%);
+        }
+
+        /* Sambar special - bigger with vegetables */
+        .sambar .bowl-container {
+            width: 140px;
+            height: 95px;
+        }
+
+        /* Floating veggies in sambar */
+        .sambar-veggies {
+            position: absolute;
             top: 15px;
-            left: 20%;
-            width: 60%;
-            height: 30px;
-            background-image: 
-                radial-gradient(circle at 20% 50%, #ffd700 8px, transparent 8px),
-                radial-gradient(circle at 50% 30%, #90EE90 6px, transparent 6px),
-                radial-gradient(circle at 80% 60%, #ffd700 7px, transparent 7px);
+            left: 15%;
+            right: 15%;
+            height: 40px;
+            pointer-events: none;
+        }
+
+        .veggie {
+            position: absolute;
+            font-size: 0.9rem;
+            animation: floatVeggie 3s infinite ease-in-out;
+        }
+
+        .veggie:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .veggie:nth-child(2) { left: 40%; animation-delay: 0.5s; }
+        .veggie:nth-child(3) { left: 70%; animation-delay: 1s; }
+        .veggie:nth-child(4) { left: 25%; top: 15px; animation-delay: 1.5s; }
+        .veggie:nth-child(5) { left: 55%; top: 15px; animation-delay: 2s; }
+
+        @keyframes floatVeggie {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-5px) rotate(5deg); }
         }
 
         .bowl-label {
-            margin-top: 0.8rem;
-            font-weight: 600;
+            margin-top: 1rem;
+            font-weight: 700;
             color: var(--text-primary);
             font-size: 1rem;
+            text-align: center;
         }
 
         .bowl-hindi {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-secondary);
+            text-align: center;
         }
 
-        /* Dip Count */
-        .dip-count {
-            background: #ff6b6b;
+        /* Dip counter badge */
+        .dip-counter {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
             color: white;
-            width: 30px;
-            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 0.9rem;
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.5);
+            border: 3px solid white;
+            z-index: 10;
         }
 
-        /* Message Popup */
+        /* Filter Coffee Bonus */
+        .coffee-section {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .coffee-cup {
+            width: 80px;
+            height: 70px;
+            margin: 0 auto;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .coffee-cup:hover {
+            transform: scale(1.1);
+        }
+
+        .coffee-cup-body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 50%, #808080 100%);
+            border-radius: 5px 5px 40% 40%;
+            position: relative;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .coffee-liquid {
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            right: 5%;
+            height: 80%;
+            background: linear-gradient(180deg, #8b4513 0%, #654321 100%);
+            border-radius: 0 0 40% 40%;
+        }
+
+        .coffee-liquid::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 10%;
+            width: 40%;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+        }
+
+        /* Coffee steam */
+        .coffee-steam {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 30px;
+        }
+
+        .coffee-steam .steam {
+            width: 8px;
+            height: 8px;
+        }
+
+        .coffee-cup-handle {
+            position: absolute;
+            right: -15px;
+            top: 15px;
+            width: 20px;
+            height: 30px;
+            border: 5px solid #a0a0a0;
+            border-left: none;
+            border-radius: 0 15px 15px 0;
+        }
+
+        .coffee-label {
+            margin-top: 0.8rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Message Popup - Upgraded */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            z-index: 2999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         .message-popup {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             background: var(--card-bg);
-            padding: 2rem 3rem;
-            border-radius: 20px;
+            padding: 2.5rem 3.5rem;
+            border-radius: 30px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            z-index: 2000;
-            transition: transform 0.3s ease;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            z-index: 3000;
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .message-popup.show {
             transform: translate(-50%, -50%) scale(1);
         }
 
+        .message-popup .emoji {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 1rem;
+            animation: popEmoji 0.5s ease;
+        }
+
+        @keyframes popEmoji {
+            0% { transform: scale(0) rotate(-180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
         .message-popup h2 {
             color: var(--text-primary);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
         }
 
         .message-popup p {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
         }
 
-        .message-popup .emoji {
-            font-size: 4rem;
-            display: block;
-            margin: 1rem 0;
-        }
-
-        .close-btn {
+        .popup-btn {
             background: linear-gradient(45deg, #ff6b6b, #feca57);
             color: white;
             border: none;
-            padding: 0.8rem 2rem;
+            padding: 1rem 2.5rem;
             border-radius: 30px;
             cursor: pointer;
             font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            margin-top: 1rem;
-            transition: transform 0.3s ease;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
         }
 
-        .close-btn:hover {
+        .popup-btn:hover {
             transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.5);
         }
 
-        .overlay {
+        /* Confetti */
+        .confetti {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1999;
-            opacity: 0;
+            width: 12px;
+            height: 12px;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            z-index: 4000;
+            animation: confettiFall 3s ease-out forwards;
         }
 
-        .overlay.show {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        /* Instructions */
-        .instructions {
-            background: var(--card-bg);
-            padding: 1.5rem 2rem;
-            border-radius: 20px;
-            margin: 1rem 2rem;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
-
-        .instructions h3 {
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .instructions p {
-            color: var(--text-secondary);
-            line-height: 1.6;
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(720deg);
+            }
         }
 
         /* Love Section */
         .love-section {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            padding: 4rem 2rem;
             text-align: center;
-            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
         }
 
         [data-theme="dark"] .love-section {
             background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);
         }
 
+        .love-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
         .love-section h2 {
             color: var(--text-primary);
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
         }
 
         .love-section p {
             color: var(--text-secondary);
-            font-size: 1.2rem;
-            max-width: 600px;
+            font-size: 1.3rem;
+            max-width: 650px;
             margin: 0 auto;
-            line-height: 1.8;
+            line-height: 2;
+            position: relative;
         }
 
-        .love-emoji {
-            font-size: 3rem;
+        .love-emoji-big {
+            font-size: 4rem;
             display: block;
-            margin: 1rem 0;
+            margin: 1.5rem 0;
             animation: heartbeat 1.5s infinite;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
         }
 
         /* Footer */
         footer {
-            background: #8b4513;
+            background: linear-gradient(135deg, #8b4513, #654321);
             color: white;
             text-align: center;
-            padding: 2rem;
+            padding: 2.5rem;
+            position: relative;
         }
 
         [data-theme="dark"] footer {
-            background: #1a1a2e;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
         }
 
-        /* Sound indicator */
+        footer p {
+            margin: 0.5rem 0;
+        }
+
+        footer .footer-heart {
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        /* Sound Indicator */
         .sound-indicator {
             position: fixed;
             bottom: 20px;
-            left: 20px;
+            left: 80px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background: var(--card-bg);
-            padding: 10px 20px;
+            padding: 12px 20px;
             border-radius: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
             z-index: 1000;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .sound-indicator.show {
@@ -589,111 +1116,43 @@
         .sound-indicator span {
             color: var(--text-primary);
             font-weight: 600;
+            font-size: 0.9rem;
         }
 
         .sound-bars {
             display: flex;
-            gap: 3px;
+            gap: 4px;
             align-items: flex-end;
-            height: 20px;
+            height: 25px;
         }
 
         .sound-bars .bar {
-            width: 4px;
+            width: 5px;
             background: linear-gradient(to top, #ff6b6b, #feca57);
-            border-radius: 2px;
+            border-radius: 3px;
             animation: equalizer 0.5s ease infinite alternate;
         }
 
-        .sound-bars .bar:nth-child(1) { height: 8px; animation-delay: 0s; }
-        .sound-bars .bar:nth-child(2) { height: 15px; animation-delay: 0.1s; }
-        .sound-bars .bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
-        .sound-bars .bar:nth-child(4) { height: 18px; animation-delay: 0.3s; }
-        .sound-bars .bar:nth-child(5) { height: 12px; animation-delay: 0.4s; }
+        .sound-bars .bar:nth-child(1) { height: 10px; animation-delay: 0s; }
+        .sound-bars .bar:nth-child(2) { height: 18px; animation-delay: 0.1s; }
+        .sound-bars .bar:nth-child(3) { height: 12px; animation-delay: 0.2s; }
+        .sound-bars .bar:nth-child(4) { height: 22px; animation-delay: 0.3s; }
+        .sound-bars .bar:nth-child(5) { height: 15px; animation-delay: 0.4s; }
 
         @keyframes equalizer {
             0% { transform: scaleY(0.3); }
             100% { transform: scaleY(1); }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-
-            .dosa-plate {
-                width: 250px;
-                height: 250px;
-            }
-
-            .dosa {
-                width: 180px;
-                height: 100px;
-            }
-
-            .bowl-container {
-                width: 100px;
-                height: 70px;
-            }
-
-            .sambar .bowl-container {
-                width: 120px;
-                height: 80px;
-            }
-
-            .dipping-section {
-                gap: 1rem;
-                padding: 1rem;
-            }
-
-            .score-board {
-                gap: 1rem;
-                margin: 1rem;
-            }
-
-            .controls {
-                top: 10px;
-                right: 10px;
-            }
-
-            .control-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-            }
-        }
-
-        /* Yummy animation */
-        .yummy-text {
-            position: fixed;
-            font-size: 2rem;
-            font-weight: 800;
-            color: #ff6b6b;
-            pointer-events: none;
-            z-index: 3000;
-            animation: yummyFloat 1s ease-out forwards;
-        }
-
-        @keyframes yummyFloat {
-            0% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(1.5);
-            }
-        }
-
-        /* Splash effect */
+        /* Splash Effect */
         .splash {
-            position: absolute;
-            width: 10px;
-            height: 10px;
+            position: fixed;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             pointer-events: none;
-            animation: splash 0.6s ease-out forwards;
+            z-index: 3000;
+            animation: splash 0.7s ease-out forwards;
         }
 
         @keyframes splash {
@@ -706,6 +1165,147 @@
                 transform: scale(0) translate(var(--tx), var(--ty));
             }
         }
+
+        /* Yummy Text */
+        .yummy-text {
+            position: fixed;
+            font-size: 2.2rem;
+            font-weight: 900;
+            pointer-events: none;
+            z-index: 3000;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: yummyFloat 1.2s ease-out forwards;
+        }
+
+        @keyframes yummyFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(-10deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-120px) scale(1.5) rotate(10deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .love-meter-container {
+                display: none;
+            }
+
+            .banana-leaf-plate {
+                width: 280px;
+                height: 280px;
+            }
+
+            .dosa {
+                width: 160px;
+                height: 90px;
+            }
+
+            .bowl-container {
+                width: 90px;
+                height: 65px;
+            }
+
+            .sambar .bowl-container {
+                width: 110px;
+                height: 80px;
+            }
+
+            .dipping-section {
+                gap: 1.2rem;
+                padding: 1.5rem;
+            }
+
+            .controls {
+                top: 10px;
+                right: 10px;
+            }
+
+            .control-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+
+            .stats-board {
+                margin: 1rem 0.5rem;
+                gap: 0.8rem;
+            }
+
+            .stat-item {
+                min-width: 90px;
+                padding: 0.8rem;
+            }
+
+            .dosa-selector {
+                gap: 0.5rem;
+            }
+
+            .dosa-type-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.75rem;
+            }
+
+            .combo-display {
+                font-size: 1rem;
+                padding: 0.6rem 1.5rem;
+            }
+        }
+
+        /* Instructions Toggle */
+        .instructions-toggle {
+            background: var(--card-bg);
+            margin: 1rem 2rem;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .instructions-header {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        .instructions-header:hover {
+            background: var(--bg-secondary);
+        }
+
+        .instructions-content {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .instructions-content.open {
+            padding: 1rem 1.5rem;
+            max-height: 300px;
+        }
+
+        .instructions-content p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .arrow-icon.open {
+            transform: rotate(180deg);
+        }
     </style>
 </head>
 <body>
@@ -713,6 +1313,18 @@
     <audio id="bgMusic" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Floating Hearts Background -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <!-- Love Meter -->
+    <div class="love-meter-container">
+        <div class="love-meter-heart">💕</div>
+        <div class="love-meter">
+            <div class="love-meter-fill" id="loveMeterFill" style="height: 0%;"></div>
+        </div>
+        <div class="love-meter-label">LOVE</div>
+    </div>
 
     <!-- Controls -->
     <div class="controls">
@@ -733,172 +1345,267 @@
             <div class="bar"></div>
             <div class="bar"></div>
         </div>
-        <span>Now Playing</span>
+        <span>🎵 Playing</span>
+    </div>
+
+    <!-- Combo Display -->
+    <div class="combo-display" id="comboDisplay">🔥 2x COMBO!</div>
+
+    <!-- Achievement Badge -->
+    <div class="achievement" id="achievement">
+        <span class="badge-icon">🏆</span>
+        <span class="badge-text">Achievement Unlocked!</span>
     </div>
 
     <!-- Header -->
     <header class="header">
-        <h1>🎮 Dosa Dipping Game</h1>
-        <p>Made with ❤️ for my Cutie</p>
+        <h1>🎮 Dosa Love Game 🎮</h1>
+        <p>Made with <span class="heart">❤️</span> for my Cutie</p>
     </header>
 
-    <!-- Score Board -->
-    <div class="score-board">
-        <div class="score-item">
+    <!-- Stats Board -->
+    <div class="stats-board">
+        <div class="stat-item">
+            <span class="icon">🥘</span>
             <div class="label">Total Dips</div>
             <div class="value" id="totalDips">0</div>
         </div>
-        <div class="score-item">
+        <div class="stat-item">
+            <span class="icon">⭐</span>
             <div class="label">Yummy Points</div>
             <div class="value" id="yummyPoints">0</div>
         </div>
-        <div class="score-item">
-            <div class="label">Current Dosa</div>
-            <div class="value" id="currentDosa">🥘</div>
+        <div class="stat-item">
+            <span class="icon">🔥</span>
+            <div class="label">Best Combo</div>
+            <div class="value" id="bestCombo">0x</div>
+        </div>
+        <div class="stat-item">
+            <span class="icon">💕</span>
+            <div class="label">Love Level</div>
+            <div class="value" id="loveLevel">1</div>
         </div>
     </div>
 
-    <!-- Instructions -->
-    <div class="instructions">
-        <h3>📖 Kaise Khelna Hai:</h3>
-        <p>
-            1. Pehle neeche se <strong>Dosa type</strong> choose karo 👇<br>
-            2. Dosa ko <strong>drag</strong> karke chutney ya sambar pe le jao 🖱️<br>
-            3. Bowl pe chhodh do - <strong>DIP</strong> ho jayega! 💦<br>
-            4. Jitna dip, utna yummy! 😋
-        </p>
+    <!-- Instructions Toggle -->
+    <div class="instructions-toggle">
+        <div class="instructions-header" onclick="toggleInstructions()">
+            <span>📖 Kaise Khelna Hai?</span>
+            <span class="arrow-icon" id="arrowIcon">▼</span>
+        </div>
+        <div class="instructions-content" id="instructionsContent">
+            <p>
+                1️⃣ Neeche se <strong>Dosa type</strong> choose karo<br>
+                2️⃣ Dosa ko <strong>drag</strong> karke neeche bowls pe le jao<br>
+                3️⃣ Bowl pe chhodh do - <strong>DIP!</strong> ho jayega<br>
+                4️⃣ Alag alag chutneys try karo - <strong>COMBO</strong> banao!<br>
+                5️⃣ ☕ <strong>Coffee</strong> pe click karo bonus ke liye!<br>
+                6️⃣ <strong>Love Meter</strong> bhar ke apna pyaar dikhao! 💕
+            </p>
+        </div>
     </div>
 
     <!-- Dosa Type Selector -->
     <div class="dosa-selector">
         <button class="dosa-type-btn active" data-type="plain" data-name="Sada Dosa">
-            Sada Dosa
+            <span class="emoji">🥘</span> Sada
         </button>
         <button class="dosa-type-btn" data-type="aloo" data-name="Aloo Masala">
-            Aloo Masala
+            <span class="emoji">🥔</span> Aloo
         </button>
         <button class="dosa-type-btn" data-type="paneer" data-name="Paneer Aloo">
-            Paneer Aloo
+            <span class="emoji">🧀</span> Paneer
         </button>
         <button class="dosa-type-btn" data-type="cheese" data-name="Cheese Dosa">
-            Cheese Dosa
+            <span class="emoji">🧀</span> Cheese
         </button>
         <button class="dosa-type-btn" data-type="mysore" data-name="Mysore Masala">
-            Mysore Masala
+            <span class="emoji">🌶️</span> Mysore
         </button>
         <button class="dosa-type-btn" data-type="paper" data-name="Paper Roast">
-            Paper Roast
+            <span class="emoji">📜</span> Paper
+        </button>
+        <button class="dosa-type-btn" data-type="rava" data-name="Rava Dosa">
+            <span class="emoji">✨</span> Rava
+        </button>
+        <button class="dosa-type-btn" data-type="onion" data-name="Onion Dosa">
+            <span class="emoji">🧅</span> Onion
         </button>
     </div>
 
-    <!-- Game Container -->
-    <div class="game-container">
-        <!-- Dosa Plate -->
-        <div class="dosa-plate">
-            <div class="plate">
-                <div class="dosa" id="dosa" draggable="true">
-                    <span class="filling" id="dosaFilling">Sada Dosa</span>
+    <!-- Game Area -->
+    <div class="game-area">
+        <!-- Banana Leaf Plate -->
+        <div class="banana-leaf-plate">
+            <div class="banana-leaf">
+                <div class="leaf-veins"></div>
+                
+                <!-- Steam Effect -->
+                <div class="steam-container" id="steamContainer">
+                    <div class="steam"></div>
+                    <div class="steam"></div>
+                    <div class="steam"></div>
+                </div>
+                
+                <!-- Dosa -->
+                <div class="dosa-wrapper">
+                    <div class="dosa" id="dosa" draggable="true">
+                        <span class="filling-badge" id="fillingBadge">Sada Dosa</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Dipping Section -->
         <div class="dipping-section">
-            <h3>👇 Yahan Dip Karo! 👇</h3>
+            <h3><span class="arrow">👇</span> Yahan Dip Karo! <span class="arrow">👇</span></h3>
 
             <!-- Coconut Chutney -->
-            <div class="bowl coconut" data-name="Coconut Chutney" data-hindi="नारियल चटनी">
+            <div class="bowl coconut" data-name="Coconut Chutney" data-hindi="नारियल चटनी" data-color="#f5f5dc">
                 <div class="bowl-container">
-                    <div class="bowl-outer">
-                        <div class="bowl-inner"></div>
+                    <div class="bowl-3d">
+                        <div class="bowl-outer">
+                            <div class="bowl-inner">
+                                <div class="liquid"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="dip-count" id="coconutCount">0</div>
+                    <div class="dip-counter" id="coconutCount">0</div>
                 </div>
-                <div class="bowl-label">Coconut Chutney</div>
+                <div class="bowl-label">🥥 Coconut</div>
                 <div class="bowl-hindi">नारियल चटनी</div>
             </div>
 
             <!-- Tomato Chutney -->
-            <div class="bowl tomato" data-name="Tomato Chutney" data-hindi="टमाटर चटनी">
+            <div class="bowl tomato" data-name="Tomato Chutney" data-hindi="टमाटर चटनी" data-color="#ff6347">
                 <div class="bowl-container">
-                    <div class="bowl-outer">
-                        <div class="bowl-inner"></div>
+                    <div class="bowl-3d">
+                        <div class="bowl-outer">
+                            <div class="bowl-inner">
+                                <div class="liquid"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="dip-count" id="tomatoCount">0</div>
+                    <div class="dip-counter" id="tomatoCount">0</div>
                 </div>
-                <div class="bowl-label">Tomato Chutney</div>
+                <div class="bowl-label">🍅 Tomato</div>
                 <div class="bowl-hindi">टमाटर चटनी</div>
             </div>
 
             <!-- Pudina Chutney -->
-            <div class="bowl pudina" data-name="Pudina Chutney" data-hindi="पुदीना चटनी">
+            <div class="bowl pudina" data-name="Pudina Chutney" data-hindi="पुदीना चटनी" data-color="#32cd32">
                 <div class="bowl-container">
-                    <div class="bowl-outer">
-                        <div class="bowl-inner"></div>
+                    <div class="bowl-3d">
+                        <div class="bowl-outer">
+                            <div class="bowl-inner">
+                                <div class="liquid"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="dip-count" id="pudinaCount">0</div>
+                    <div class="dip-counter" id="pudinaCount">0</div>
                 </div>
-                <div class="bowl-label">Pudina Chutney</div>
+                <div class="bowl-label">🌿 Pudina</div>
                 <div class="bowl-hindi">पुदीना चटनी</div>
             </div>
 
             <!-- Sambar -->
-            <div class="bowl sambar" data-name="Sambar" data-hindi="सांभर">
+            <div class="bowl sambar" data-name="Sambar" data-hindi="सांभर" data-color="#d2691e">
                 <div class="bowl-container">
-                    <div class="bowl-outer">
-                        <div class="bowl-inner"></div>
+                    <div class="bowl-3d">
+                        <div class="bowl-outer">
+                            <div class="bowl-inner">
+                                <div class="liquid">
+                                    <div class="sambar-veggies">
+                                        <span class="veggie">🥕</span>
+                                        <span class="veggie">🧅</span>
+                                        <span class="veggie">🍅</span>
+                                        <span class="veggie">🌿</span>
+                                        <span class="veggie">🥬</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="dip-count" id="sambarCount">0</div>
+                    <div class="dip-counter" id="sambarCount">0</div>
                 </div>
-                <div class="bowl-label">Sambar</div>
-                <div class="bowl-hindi">सांभर 🔥</div>
+                <div class="bowl-label">🥘 Sambar</div>
+                <div class="bowl-hindi">गरम सांभर 🔥</div>
             </div>
+        </div>
+
+        <!-- Filter Coffee Bonus -->
+        <div class="coffee-section">
+            <div class="coffee-cup" onclick="drinkCoffee()" title="Click for bonus!">
+                <div class="coffee-steam">
+                    <div class="steam"></div>
+                    <div class="steam"></div>
+                    <div class="steam"></div>
+                </div>
+                <div class="coffee-cup-body">
+                    <div class="coffee-liquid"></div>
+                </div>
+                <div class="coffee-cup-handle"></div>
+            </div>
+            <div class="coffee-label">☕ Filter Coffee (Bonus!)</div>
         </div>
     </div>
 
     <!-- Love Section -->
     <section class="love-section">
-        <span class="love-emoji">💕</span>
+        <span class="love-emoji-big">💕</span>
         <h2>For My Cutie!</h2>
         <p>
             "Jaise dosa ko chutney complete karti hai,<br>
             waise tu meri life complete karti hai!<br><br>
-            Aur jaise sambar mein sab kuch hai,<br>
-            waise mere dil mein bas tu hai! 🥘❤️"
+            Sambar ki garmahat jaisi hai teri smile,<br>
+            Tere saath har pal lagta hai worthwhile! 🥘❤️"
         </p>
-        <span class="love-emoji">😘</span>
+        <span class="love-emoji-big">😘</span>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p style="font-size: 1.3rem; margin-bottom: 0.5rem;">🥘 Dosa Love Game 🥘</p>
-        <p>Made with ❤️ | Jab bhi yaad aaye, khel lena!</p>
+        <p style="font-size: 1.5rem;">🥘 Dosa Love Game 🥘</p>
+        <p>Made with <span class="footer-heart">❤️</span> by someone who loves you!</p>
+        <p style="opacity: 0.7; margin-top: 0.5rem;">Jab bhi yaad aaye, khel lena! 😊</p>
     </footer>
 
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+
     <!-- Message Popup -->
-    <div class="overlay" id="overlay"></div>
     <div class="message-popup" id="messagePopup">
         <span class="emoji" id="popupEmoji">😋</span>
         <h2 id="popupTitle">Yummy!</h2>
         <p id="popupMessage">Dosa + Chutney = Perfect!</p>
-        <button class="close-btn" onclick="closePopup()">Aur Khao! 🥘</button>
+        <button class="popup-btn" onclick="closePopup()">Aur Khao! 🥘</button>
     </div>
 
     <script>
-        // Variables
+        // ========== GAME VARIABLES ==========
         const dosa = document.getElementById('dosa');
-        const dosaFilling = document.getElementById('dosaFilling');
+        const fillingBadge = document.getElementById('fillingBadge');
         const bowls = document.querySelectorAll('.bowl');
         const bgMusic = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicBtn');
         const themeBtn = document.getElementById('themeBtn');
         const soundIndicator = document.getElementById('soundIndicator');
+        const loveMeterFill = document.getElementById('loveMeterFill');
+        const comboDisplay = document.getElementById('comboDisplay');
+        const achievement = document.getElementById('achievement');
         
         let totalDips = 0;
         let yummyPoints = 0;
         let currentDosaType = 'plain';
         let isMusicPlaying = false;
         let isDarkMode = false;
+        let loveLevel = 1;
+        let loveMeter = 0;
+        let comboCount = 0;
+        let bestCombo = 0;
+        let lastDipType = '';
+        let comboTimer = null;
+        let coffeeCount = 0;
         
         // Dip counts
         let dipCounts = {
@@ -908,63 +1615,66 @@
             sambar: 0
         };
 
-        // Messages for dipping
-        const messages = {
-            coconut: [
-                { emoji: "🥥", title: "Nariyal Chutney!", msg: "Creamy aur tasty!" },
-                { emoji: "😋", title: "Perfect Dip!", msg: "South Indian vibes!" },
-                { emoji: "💛", title: "Yummy!", msg: "Coconut love!" }
-            ],
-            tomato: [
-                { emoji: "🍅", title: "Tomato Chutney!", msg: "Tangy aur spicy!" },
-                { emoji: "🔥", title: "Mast Hai!", msg: "Red hot love!" },
-                { emoji: "😍", title: "Zabardast!", msg: "Perfect balance!" }
-            ],
-            pudina: [
-                { emoji: "🌿", title: "Pudina Fresh!", msg: "Cooling effect!" },
-                { emoji: "💚", title: "Green Power!", msg: "Healthy aur tasty!" },
-                { emoji: "😎", title: "Refreshing!", msg: "Mint lover!" }
-            ],
-            sambar: [
-                { emoji: "🥘", title: "Sambar Dive!", msg: "Full South Indian!" },
-                { emoji: "🔥", title: "Garam Sambar!", msg: "Ekdum mast!" },
-                { emoji: "😋", title: "Perfect Combo!", msg: "Dosa + Sambar = Love!" }
-            ]
+        // Achievements
+        let achievements = {
+            firstDip: false,
+            tenDips: false,
+            twentyFiveDips: false,
+            fiftyDips: false,
+            hundredDips: false,
+            allChutneys: false,
+            comboMaster: false,
+            coffeeLover: false,
+            sambarKing: false
         };
 
-        // Special messages for milestones
-        const milestoneMessages = [
-            { dips: 5, emoji: "🎉", title: "5 Dips Done!", msg: "Tera cutie khush hai!" },
-            { dips: 10, emoji: "🏆", title: "10 Dips!", msg: "Expert dipper ban gaya!" },
-            { dips: 20, emoji: "👑", title: "Dosa King!", msg: "Tera cutie pagal hai tere pe!" },
-            { dips: 50, emoji: "💕", title: "Ultimate Foodie!", msg: "I love you 3000! ❤️" }
-        ];
+        // ========== FLOATING HEARTS ==========
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const hearts = ['❤️', '💕', '💖', '💗', '💝', '🧡', '💛'];
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                heart.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(heart);
+            }
+        }
+        createFloatingHearts();
 
-        // Dosa type selector
+        // ========== INSTRUCTIONS TOGGLE ==========
+        function toggleInstructions() {
+            const content = document.getElementById('instructionsContent');
+            const arrow = document.getElementById('arrowIcon');
+            content.classList.toggle('open');
+            arrow.classList.toggle('open');
+        }
+
+        // ========== DOSA TYPE SELECTOR ==========
         document.querySelectorAll('.dosa-type-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.dosa-type-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentDosaType = btn.dataset.type;
-                dosaFilling.textContent = btn.dataset.name;
-                document.getElementById('currentDosa').textContent = btn.dataset.name;
+                fillingBadge.textContent = btn.dataset.name;
                 
-                // Visual feedback
-                dosa.style.transform = 'scale(1.1)';
+                // Bounce animation
+                dosa.style.transform = 'scale(1.15)';
                 setTimeout(() => dosa.style.transform = 'scale(1)', 200);
             });
         });
 
-        // Drag and Drop
+        // ========== DRAG AND DROP ==========
         let isDragging = false;
         let startX, startY, initialX, initialY;
 
         dosa.addEventListener('mousedown', startDrag);
         dosa.addEventListener('touchstart', startDrag, { passive: false });
-
         document.addEventListener('mousemove', drag);
         document.addEventListener('touchmove', drag, { passive: false });
-
         document.addEventListener('mouseup', endDrag);
         document.addEventListener('touchend', endDrag);
 
@@ -1015,7 +1725,6 @@
             isDragging = false;
             dosa.classList.remove('dragging');
             
-            // Check if dropped on a bowl
             const dosaRect = dosa.getBoundingClientRect();
             const dosaCenterX = dosaRect.left + dosaRect.width / 2;
             const dosaCenterY = dosaRect.top + dosaRect.height / 2;
@@ -1029,14 +1738,11 @@
                     dosaCenterX <= bowlRect.right && 
                     dosaCenterY >= bowlRect.top && 
                     dosaCenterY <= bowlRect.bottom) {
-                    
-                    // Dipped!
                     dipped = true;
                     handleDip(bowl);
                 }
             });
             
-            // Reset dosa position
             resetDosaPosition();
         }
 
@@ -1044,105 +1750,270 @@
             dosa.style.position = 'relative';
             dosa.style.left = '';
             dosa.style.top = '';
-            dosa.style.zIndex = '100';
+            dosa.style.zIndex = '10';
         }
 
+        // ========== DIP HANDLING ==========
         function handleDip(bowl) {
-            const bowlType = bowl.classList[1]; // coconut, tomato, pudina, sambar
+            const bowlType = bowl.classList[1];
+            const bowlColor = bowl.dataset.color;
+            
+            // Update combo
+            if (lastDipType !== '' && lastDipType !== bowlType) {
+                comboCount++;
+                if (comboCount > bestCombo) {
+                    bestCombo = comboCount;
+                    document.getElementById('bestCombo').textContent = bestCombo + 'x';
+                }
+                showCombo();
+            } else if (lastDipType === bowlType) {
+                comboCount = 0;
+            }
+            lastDipType = bowlType;
+            
+            // Reset combo timer
+            clearTimeout(comboTimer);
+            comboTimer = setTimeout(() => {
+                comboCount = 0;
+                lastDipType = '';
+            }, 3000);
+            
+            // Calculate points
+            let points = bowlType === 'sambar' ? 15 : 10;
+            points += comboCount * 5; // Combo bonus
             
             // Increment counts
             dipCounts[bowlType]++;
             totalDips++;
-            yummyPoints += bowlType === 'sambar' ? 15 : 10;
+            yummyPoints += points;
+            
+            // Update love meter
+            loveMeter += 2;
+            if (loveMeter >= 100) {
+                loveMeter = 0;
+                loveLevel++;
+                document.getElementById('loveLevel').textContent = loveLevel;
+                showAchievement('💕', 'Love Level Up!');
+            }
+            loveMeterFill.style.height = loveMeter + '%';
             
             // Update UI
             document.getElementById(`${bowlType}Count`).textContent = dipCounts[bowlType];
             document.getElementById('totalDips').textContent = totalDips;
             document.getElementById('yummyPoints').textContent = yummyPoints;
             
-            // Bowl animation
+            // Animations
             bowl.classList.add('dipping');
-            setTimeout(() => bowl.classList.remove('dipping'), 500);
+            setTimeout(() => bowl.classList.remove('dipping'), 600);
             
-            // Create splash effect
-            createSplash(bowl, bowlType);
-            
-            // Show yummy text
+            createSplash(bowl, bowlColor);
             showYummyText(bowl);
             
-            // Check for milestone
-            const milestone = milestoneMessages.find(m => m.dips === totalDips);
-            if (milestone) {
-                setTimeout(() => showPopup(milestone.emoji, milestone.title, milestone.msg), 500);
-            } else if (totalDips % 3 === 0) {
-                // Random message every 3 dips
-                const msgs = messages[bowlType];
-                const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
-                setTimeout(() => showPopup(randomMsg.emoji, randomMsg.title, randomMsg.msg), 300);
+            // Check achievements
+            checkAchievements();
+            
+            // Show random message
+            if (totalDips % 5 === 0) {
+                const msgs = getRandomMessage(bowlType);
+                setTimeout(() => showPopup(msgs.emoji, msgs.title, msgs.msg), 400);
             }
-        }
-
-        function createSplash(bowl, type) {
-            const colors = {
-                coconut: '#f5f5dc',
-                tomato: '#ff6347',
-                pudina: '#32cd32',
-                sambar: '#d2691e'
-            };
-            
-            const bowlRect = bowl.querySelector('.bowl-inner').getBoundingClientRect();
-            
-            for (let i = 0; i < 8; i++) {
-                const splash = document.createElement('div');
-                splash.className = 'splash';
-                splash.style.background = colors[type];
-                splash.style.left = (bowlRect.left + bowlRect.width/2) + 'px';
-                splash.style.top = (bowlRect.top + 20) + 'px';
-                splash.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
-                splash.style.setProperty('--ty', (Math.random() - 0.5) * 100 + 'px');
-                document.body.appendChild(splash);
-                
-                setTimeout(() => splash.remove(), 600);
-            }
-        }
-
-        function showYummyText(bowl) {
-            const texts = ['Yummy!', 'Tasty!', 'Mast!', 'Wow!', 'Nice!', '😋'];
-            const text = texts[Math.floor(Math.random() * texts.length)];
-            
-            const yummy = document.createElement('div');
-            yummy.className = 'yummy-text';
-            yummy.textContent = text;
-            
-            const rect = bowl.getBoundingClientRect();
-            yummy.style.left = rect.left + rect.width/2 - 30 + 'px';
-            yummy.style.top = rect.top + 'px';
-            
-            document.body.appendChild(yummy);
-            setTimeout(() => yummy.remove(), 1000);
-        }
-
-        function showPopup(emoji, title, msg) {
-            document.getElementById('popupEmoji').textContent = emoji;
-            document.getElementById('popupTitle').textContent = title;
-            document.getElementById('popupMessage').textContent = msg;
-            document.getElementById('overlay').classList.add('show');
-            document.getElementById('messagePopup').classList.add('show');
-        }
-
-        function closePopup() {
-            document.getElementById('overlay').classList.remove('show');
-            document.getElementById('messagePopup').classList.remove('show');
         }
 
         // Click on bowl also works
         bowls.forEach(bowl => {
-            bowl.addEventListener('click', () => {
-                handleDip(bowl);
-            });
+            bowl.addEventListener('click', () => handleDip(bowl));
         });
 
-        // Music toggle
+        // ========== COMBO DISPLAY ==========
+        function showCombo() {
+            const comboTexts = ['2x COMBO!', '3x COMBO!', '4x COMBO! 🔥', '5x COMBO! 🔥🔥', 'MEGA COMBO! 🔥🔥🔥'];
+            comboDisplay.textContent = '🔥 ' + (comboTexts[Math.min(comboCount - 1, 4)]);
+            comboDisplay.classList.add('show');
+            setTimeout(() => comboDisplay.classList.remove('show'), 2000);
+            
+            // Combo master achievement
+            if (comboCount >= 5 && !achievements.comboMaster) {
+                achievements.comboMaster = true;
+                showAchievement('🏆', 'Combo Master!');
+            }
+        }
+
+        // ========== ACHIEVEMENTS ==========
+        function checkAchievements() {
+            if (totalDips === 1 && !achievements.firstDip) {
+                achievements.firstDip = true;
+                showAchievement('🎉', 'First Dip!');
+            }
+            if (totalDips === 10 && !achievements.tenDips) {
+                achievements.tenDips = true;
+                showAchievement('⭐', '10 Dips Done!');
+            }
+            if (totalDips === 25 && !achievements.twentyFiveDips) {
+                achievements.twentyFiveDips = true;
+                showAchievement('🌟', '25 Dips! Expert!');
+            }
+            if (totalDips === 50 && !achievements.fiftyDips) {
+                achievements.fiftyDips = true;
+                showAchievement('👑', '50 Dips! King!');
+                createConfetti();
+            }
+            if (totalDips === 100 && !achievements.hundredDips) {
+                achievements.hundredDips = true;
+                showAchievement('💎', '100 Dips! Legend!');
+                createConfetti();
+            }
+            if (dipCounts.sambar >= 20 && !achievements.sambarKing) {
+                achievements.sambarKing = true;
+                showAchievement('🥘', 'Sambar King!');
+            }
+            
+            // All chutneys tried
+            if (dipCounts.coconut > 0 && dipCounts.tomato > 0 && 
+                dipCounts.pudina > 0 && dipCounts.sambar > 0 && 
+                !achievements.allChutneys) {
+                achievements.allChutneys = true;
+                showAchievement('🎨', 'All Chutneys Tried!');
+            }
+        }
+
+        function showAchievement(icon, text) {
+            achievement.querySelector('.badge-icon').textContent = icon;
+            achievement.querySelector('.badge-text').textContent = text;
+            achievement.classList.add('show');
+            setTimeout(() => achievement.classList.remove('show'), 3000);
+        }
+
+        // ========== EFFECTS ==========
+        function createSplash(bowl, color) {
+            const bowlRect = bowl.querySelector('.bowl-inner').getBoundingClientRect();
+            
+            for (let i = 0; i < 10; i++) {
+                const splash = document.createElement('div');
+                splash.className = 'splash';
+                splash.style.background = color;
+                splash.style.left = (bowlRect.left + bowlRect.width/2) + 'px';
+                splash.style.top = (bowlRect.top + 25) + 'px';
+                splash.style.setProperty('--tx', (Math.random() - 0.5) * 120 + 'px');
+                splash.style.setProperty('--ty', (Math.random() - 0.5) * 120 + 'px');
+                document.body.appendChild(splash);
+                setTimeout(() => splash.remove(), 700);
+            }
+        }
+
+        function showYummyText(bowl) {
+            const texts = [
+                { text: 'Yummy!', color: '#ff6b6b' },
+                { text: 'Tasty!', color: '#feca57' },
+                { text: 'Mast!', color: '#ff6b6b' },
+                { text: 'Wow!', color: '#48dbfb' },
+                { text: 'Nice!', color: '#1dd1a1' },
+                { text: '😋', color: '#ff6b6b' },
+                { text: '+' + (10 + comboCount * 5), color: '#ffd700' }
+            ];
+            const item = texts[Math.floor(Math.random() * texts.length)];
+            
+            const yummy = document.createElement('div');
+            yummy.className = 'yummy-text';
+            yummy.textContent = item.text;
+            yummy.style.color = item.color;
+            
+            const rect = bowl.getBoundingClientRect();
+            yummy.style.left = rect.left + rect.width/2 - 40 + 'px';
+            yummy.style.top = rect.top - 20 + 'px';
+            
+            document.body.appendChild(yummy);
+            setTimeout(() => yummy.remove(), 1200);
+        }
+
+        function createConfetti() {
+            const emojis = ['🎉', '🎊', '✨', '💕', '🥘', '⭐', '🌟'];
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#1dd1a1', '#ff9ff3'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    
+                    if (Math.random() > 0.5) {
+                        confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                        confetti.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+                        confetti.style.background = 'transparent';
+                    } else {
+                        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    }
+                    
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-20px';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // ========== MESSAGES ==========
+        function getRandomMessage(bowlType) {
+            const messages = {
+                coconut: [
+                    { emoji: "🥥", title: "Coconut Chutney!", msg: "Creamy, mild aur refreshing!" },
+                    { emoji: "😋", title: "Perfect Dip!", msg: "South Indian classic!" },
+                    { emoji: "💛", title: "Yummy!", msg: "Nariyal ki meethi khushbu!" }
+                ],
+                tomato: [
+                    { emoji: "🍅", title: "Tomato Chutney!", msg: "Tangy aur spicy!" },
+                    { emoji: "🔥", title: "Mast Hai!", msg: "Red hot love!" },
+                    { emoji: "😍", title: "Zabardast!", msg: "Perfect balance of flavors!" }
+                ],
+                pudina: [
+                    { emoji: "🌿", title: "Pudina Fresh!", msg: "Cooling mint magic!" },
+                    { emoji: "💚", title: "Green Power!", msg: "Healthy aur tasty!" },
+                    { emoji: "😎", title: "Refreshing!", msg: "Mint lover spotted!" }
+                ],
+                sambar: [
+                    { emoji: "🥘", title: "Sambar Dive!", msg: "Full South Indian experience!" },
+                    { emoji: "🔥", title: "Garam Sambar!", msg: "Vegetables aur masala!" },
+                    { emoji: "😋", title: "Perfect Combo!", msg: "Dosa + Sambar = Heaven!" }
+                ]
+            };
+            const msgs = messages[bowlType];
+            return msgs[Math.floor(Math.random() * msgs.length)];
+        }
+
+        // ========== POPUP ==========
+        function showPopup(emoji, title, msg) {
+            document.getElementById('popupEmoji').textContent = emoji;
+            document.getElementById('popupTitle').textContent = title;
+            document.getElementById('popupMessage').textContent = msg;
+            document.getElementById('popupOverlay').classList.add('show');
+            document.getElementById('messagePopup').classList.add('show');
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').classList.remove('show');
+            document.getElementById('messagePopup').classList.remove('show');
+        }
+
+        // ========== COFFEE BONUS ==========
+        function drinkCoffee() {
+            coffeeCount++;
+            yummyPoints += 25;
+            document.getElementById('yummyPoints').textContent = yummyPoints;
+            
+            // Love meter boost
+            loveMeter = Math.min(loveMeter + 10, 100);
+            loveMeterFill.style.height = loveMeter + '%';
+            
+            showPopup('☕', 'Filter Coffee!', 'Ahh! Garam coffee = +25 points! ');
+            
+            if (coffeeCount >= 5 && !achievements.coffeeLover) {
+                achievements.coffeeLover = true;
+                setTimeout(() => showAchievement('☕', 'Coffee Lover!'), 1500);
+            }
+        }
+
+        // ========== MUSIC TOGGLE ==========
         function toggleMusic() {
             if (isMusicPlaying) {
                 bgMusic.pause();
@@ -1158,15 +2029,17 @@
             isMusicPlaying = !isMusicPlaying;
         }
 
-        // Theme toggle
+        // ========== THEME TOGGLE ==========
         function toggleTheme() {
             isDarkMode = !isDarkMode;
             if (isDarkMode) {
                 document.documentElement.setAttribute('data-theme', 'dark');
                 themeBtn.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
             } else {
                 document.documentElement.removeAttribute('data-theme');
                 themeBtn.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
             }
         }
 
@@ -1177,9 +2050,10 @@
             isDarkMode = true;
         }
 
-        // Console message
-        console.log('%c🥘 Dosa Dipping Game 🥘', 'font-size: 30px; color: #8b4513;');
+        // ========== CONSOLE MESSAGE ==========
+        console.log('%c🥘 Dosa Love Game 🥘', 'font-size: 30px; color: #8b4513; font-weight: bold;');
         console.log('%cMade with ❤️ for someone special!', 'font-size: 16px; color: #ff6b6b;');
+        console.log('%c🎮 Enjoy the game!', 'font-size: 14px; color: #667eea;');
     </script>
 </body>
     </html>
