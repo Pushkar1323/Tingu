@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🥘 Dosa Love - Made with ❤️ for You</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>🎮 Dosa Dipping Game - For My Cutie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,258 +12,60 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --bg-primary: linear-gradient(135deg, #fff5e6 0%, #ffe4c4 100%);
+            --bg-secondary: #fff8f0;
+            --text-primary: #8b4513;
+            --text-secondary: #666;
+            --card-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            --bg-secondary: #1f1f3d;
+            --text-primary: #ffd700;
+            --text-secondary: #b8b8d1;
+            --card-bg: #2d2d5a;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #fff5e6 0%, #ffe4c4 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
             overflow-x: hidden;
+            transition: all 0.5s ease;
         }
 
-        /* Floating Food Particles */
-        .particle {
+        /* Controls */
+        .controls {
             position: fixed;
-            font-size: 2rem;
-            animation: float 15s infinite;
-            opacity: 0.6;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
+            top: 20px;
+            right: 20px;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
+            gap: 10px;
+            z-index: 1000;
         }
 
-        .hero-title {
-            font-size: 4rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #d4a574, #8b4513, #d4a574);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradient 3s ease infinite;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes gradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: #666;
-            margin-bottom: 2rem;
-        }
-
-        .heart {
-            display: inline-block;
-            animation: heartbeat 1.5s infinite;
-            color: #ff6b6b;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        .dosa-hero {
-            font-size: 8rem;
-            animation: bounce 2s infinite;
-            margin: 2rem 0;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 2rem;
-            animation: scrollBounce 2s infinite;
-            font-size: 2rem;
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
             cursor: pointer;
-        }
-
-        @keyframes scrollBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(10px); }
-        }
-
-        /* Section Styles */
-        .section {
-            padding: 4rem 2rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #8b4513;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #d4a574, #8b4513);
-            margin: 1rem auto;
-            border-radius: 2px;
-        }
-
-        /* Dosa Cards */
-        .dosa-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 1rem;
-        }
-
-        .dosa-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(139, 69, 19, 0.15);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
-            position: relative;
-        }
-
-        .dosa-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 60px rgba(139, 69, 19, 0.25);
-        }
-
-        .dosa-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
-        }
-
-        .dosa-image {
-            height: 200px;
+            font-size: 1.5rem;
             display: flex;
-            justify-content: center;
             align-items: center;
-            font-size: 6rem;
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            position: relative;
-            overflow: hidden;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
 
-        .dosa-image::after {
-            content: '✨';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 1.5rem;
-            animation: sparkle 1.5s infinite;
+        .music-btn {
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
         }
 
-        @keyframes sparkle {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
-        }
-
-        .dosa-content {
-            padding: 1.5rem;
-        }
-
-        .dosa-name {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #8b4513;
-            margin-bottom: 0.5rem;
-        }
-
-        .dosa-description {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .dosa-rating {
-            display: flex;
-            gap: 0.25rem;
-            margin-bottom: 1rem;
-        }
-
-        .star {
-            color: #feca57;
-            font-size: 1.2rem;
-        }
-
-        .dosa-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .tag {
-            background: linear-gradient(135deg, #fff5e6, #ffe4c4);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: #8b4513;
-            font-weight: 500;
-        }
-
-        /* Chutney Section */
-        .chutney-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 4rem 2rem;
-            margin: 2rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chutney-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
+        .music-btn.playing {
+            animation: rotate 3s linear infinite;
         }
 
         @keyframes rotate {
@@ -271,87 +73,471 @@
             to { transform: rotate(360deg); }
         }
 
-        .chutney-section .section-title {
-            color: white;
+        .theme-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
         }
 
-        .chutney-section .section-title::after {
-            background: linear-gradient(90deg, #feca57, #ff6b6b);
+        .control-btn:hover {
+            transform: scale(1.15);
         }
 
-        .chutney-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .chutney-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            padding: 2rem;
+        /* Header */
+        .header {
             text-align: center;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-bottom: 3px dashed var(--text-primary);
         }
 
-        .chutney-card:hover {
-            transform: translateY(-10px) rotate(2deg);
-        }
-
-        .chutney-card:nth-child(even):hover {
-            transform: translateY(-10px) rotate(-2deg);
-        }
-
-        .chutney-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            display: block;
-            animation: wiggle 2s infinite;
-        }
-
-        @keyframes wiggle {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
-        }
-
-        .chutney-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #764ba2;
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--text-primary);
             margin-bottom: 0.5rem;
         }
 
-        .chutney-desc {
-            color: #666;
-            font-size: 0.95rem;
-            line-height: 1.6;
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
         }
 
-        .chutney-color {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin: 1rem auto;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        /* Score Board */
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+            background: var(--card-bg);
+            margin: 1rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            flex-wrap: wrap;
         }
 
-        /* Love Message Section */
-        .love-section {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-            padding: 4rem 2rem;
+        .score-item {
             text-align: center;
         }
 
-        .love-message {
+        .score-item .label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .score-item .value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        /* Game Container */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            min-height: 70vh;
+        }
+
+        /* Dosa Plate */
+        .dosa-plate {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin-bottom: 2rem;
+        }
+
+        .plate {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, #e8e8e8 0%, #c0c0c0 50%, #a0a0a0 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 10px 30px rgba(0,0,0,0.3),
+                inset 0 5px 15px rgba(255,255,255,0.5),
+                inset 0 -5px 15px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Dosa */
+        .dosa {
+            width: 220px;
+            height: 120px;
+            background: linear-gradient(180deg, #d4a574 0%, #c4955a 30%, #b8864d 60%, #a67540 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            cursor: grab;
+            position: relative;
+            box-shadow: 
+                0 8px 25px rgba(0,0,0,0.3),
+                inset 0 -5px 15px rgba(0,0,0,0.2),
+                inset 0 5px 10px rgba(255,255,255,0.3);
+            transition: transform 0.1s ease;
+            user-select: none;
+            z-index: 100;
+        }
+
+        .dosa:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+        }
+
+        .dosa.dragging {
+            cursor: grabbing;
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            z-index: 1000;
+        }
+
+        /* Dosa Texture - Crispy dots */
+        .dosa::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
+                radial-gradient(circle at 60% 20%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
+                radial-gradient(circle at 80% 50%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
+                radial-gradient(circle at 30% 70%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
+                radial-gradient(circle at 70% 80%, rgba(139, 69, 19, 0.3) 2px, transparent 2px),
+                radial-gradient(circle at 50% 50%, rgba(139, 69, 19, 0.3) 2px, transparent 2px);
+            border-radius: inherit;
+        }
+
+        /* Crispy edges */
+        .dosa::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            border: 3px solid rgba(139, 69, 19, 0.4);
+            border-style: dashed;
+        }
+
+        /* Filling indicator */
+        .dosa .filling {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.9);
+            padding: 2px 10px;
+            border-radius: 10px;
+            color: #8b4513;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Dosa Types Selector */
+        .dosa-selector {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            padding: 0 1rem;
+        }
+
+        .dosa-type-btn {
+            padding: 0.8rem 1.5rem;
+            border: 3px solid var(--text-primary);
+            background: var(--card-bg);
+            color: var(--text-primary);
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .dosa-type-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .dosa-type-btn.active {
+            background: var(--text-primary);
+            color: white;
+        }
+
+        [data-theme="dark"] .dosa-type-btn.active {
+            color: #1a1a2e;
+        }
+
+        /* Chutney & Sambar Section */
+        .dipping-section {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 30px;
+            margin: 1rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .dipping-section h3 {
+            width: 100%;
+            text-align: center;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Bowl */
+        .bowl {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .bowl:hover {
+            transform: scale(1.1);
+        }
+
+        .bowl.dipping {
+            animation: dip 0.5s ease;
+        }
+
+        @keyframes dip {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .bowl-container {
+            width: 120px;
+            height: 80px;
+            position: relative;
+        }
+
+        .bowl-outer {
+            width: 100%;
+            height: 100%;
+            background: #8b4513;
+            border-radius: 10px 10px 50% 50%;
+            position: relative;
+            box-shadow: 
+                0 8px 20px rgba(0,0,0,0.3),
+                inset 0 -10px 20px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .bowl-inner {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            bottom: 5px;
+            border-radius: 5px 5px 50% 50%;
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Chutney Colors */
+        .coconut .bowl-inner {
+            background: linear-gradient(180deg, #f5f5dc 0%, #e8e4c9 50%, #ddd8b8 100%);
+        }
+
+        .tomato .bowl-inner {
+            background: linear-gradient(180deg, #ff6347 0%, #dc143c 50%, #b22222 100%);
+        }
+
+        .pudina .bowl-inner {
+            background: linear-gradient(180deg, #32cd32 0%, #228b22 50%, #006400 100%);
+        }
+
+        .sambar .bowl-inner {
+            background: linear-gradient(180deg, #d2691e 0%, #cd853f 30%, #8b4513 100%);
+        }
+
+        /* Sambar special - bigger bowl */
+        .sambar .bowl-container {
+            width: 150px;
+            height: 100px;
+        }
+
+        /* Liquid effect */
+        .bowl-inner::before {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 10%;
+            width: 30%;
+            height: 10px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+        }
+
+        /* Floating items in sambar */
+        .sambar .bowl-inner::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 20%;
+            width: 60%;
+            height: 30px;
+            background-image: 
+                radial-gradient(circle at 20% 50%, #ffd700 8px, transparent 8px),
+                radial-gradient(circle at 50% 30%, #90EE90 6px, transparent 6px),
+                radial-gradient(circle at 80% 60%, #ffd700 7px, transparent 7px);
+        }
+
+        .bowl-label {
+            margin-top: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .bowl-hindi {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Dip Count */
+        .dip-count {
+            background: #ff6b6b;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Message Popup */
+        .message-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: var(--card-bg);
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 2000;
+            transition: transform 0.3s ease;
+        }
+
+        .message-popup.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .message-popup h2 {
+            color: var(--text-primary);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .message-popup p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .message-popup .emoji {
+            font-size: 4rem;
+            display: block;
+            margin: 1rem 0;
+        }
+
+        .close-btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: var(--card-bg);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            margin: 1rem 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .instructions h3 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .instructions p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Love Section */
+        .love-section {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        [data-theme="dark"] .love-section {
+            background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);
+        }
+
+        .love-section h2 {
+            color: var(--text-primary);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .love-section p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
             max-width: 600px;
             margin: 0 auto;
-            font-size: 1.3rem;
-            color: #8b4513;
             line-height: 1.8;
         }
 
@@ -362,77 +548,9 @@
             animation: heartbeat 1.5s infinite;
         }
 
-        /* Special Combo Section */
-        .combo-section {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        .combo-section .section-title {
-            color: white;
-        }
-
-        .combo-section .section-title::after {
-            background: linear-gradient(90deg, #fff, #feca57);
-        }
-
-        .combo-box {
-            background: white;
-            max-width: 800px;
-            margin: 2rem auto;
-            border-radius: 30px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-        }
-
-        .combo-items {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            font-size: 4rem;
-            margin-bottom: 2rem;
-        }
-
-        .plus {
-            font-size: 2rem;
-            color: #11998e;
-            font-weight: bold;
-        }
-
-        .combo-title {
-            font-size: 1.8rem;
-            color: #11998e;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .combo-desc {
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        /* Order Button */
-        .order-btn {
-            background: linear-gradient(45deg, #ff6b6b, #feca57);
-            color: white;
-            border: none;
-            padding: 1rem 3rem;
-            font-size: 1.2rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            margin-top: 2rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .order-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
         /* Footer */
@@ -443,452 +561,625 @@
             padding: 2rem;
         }
 
-        footer a {
-            color: #feca57;
-            text-decoration: none;
+        [data-theme="dark"] footer {
+            background: #1a1a2e;
+        }
+
+        /* Sound indicator */
+        .sound-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sound-indicator.show {
+            opacity: 1;
+        }
+
+        .sound-indicator span {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .sound-bars {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            height: 20px;
+        }
+
+        .sound-bars .bar {
+            width: 4px;
+            background: linear-gradient(to top, #ff6b6b, #feca57);
+            border-radius: 2px;
+            animation: equalizer 0.5s ease infinite alternate;
+        }
+
+        .sound-bars .bar:nth-child(1) { height: 8px; animation-delay: 0s; }
+        .sound-bars .bar:nth-child(2) { height: 15px; animation-delay: 0.1s; }
+        .sound-bars .bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        .sound-bars .bar:nth-child(4) { height: 18px; animation-delay: 0.3s; }
+        .sound-bars .bar:nth-child(5) { height: 12px; animation-delay: 0.4s; }
+
+        @keyframes equalizer {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1); }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .dosa-hero {
-                font-size: 5rem;
-            }
-            
-            .section-title {
+            .header h1 {
                 font-size: 1.8rem;
             }
+
+            .dosa-plate {
+                width: 250px;
+                height: 250px;
+            }
+
+            .dosa {
+                width: 180px;
+                height: 100px;
+            }
+
+            .bowl-container {
+                width: 100px;
+                height: 70px;
+            }
+
+            .sambar .bowl-container {
+                width: 120px;
+                height: 80px;
+            }
+
+            .dipping-section {
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .score-board {
+                gap: 1rem;
+                margin: 1rem;
+            }
+
+            .controls {
+                top: 10px;
+                right: 10px;
+            }
+
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
         }
 
-        /* Tooltip */
-        .tooltip {
-            position: relative;
+        /* Yummy animation */
+        .yummy-text {
+            position: fixed;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ff6b6b;
+            pointer-events: none;
+            z-index: 3000;
+            animation: yummyFloat 1s ease-out forwards;
         }
 
-        .tooltip:hover::after {
-            content: attr(data-tip);
+        @keyframes yummyFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        /* Splash effect */
+        .splash {
             position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            font-size: 0.8rem;
-            white-space: nowrap;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: splash 0.6s ease-out forwards;
+        }
+
+        @keyframes splash {
+            0% {
+                opacity: 1;
+                transform: scale(1) translate(0, 0);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) translate(var(--tx), var(--ty));
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Floating Particles -->
-    <div class="particle" style="left: 10%; animation-delay: 0s;">🥘</div>
-    <div class="particle" style="left: 20%; animation-delay: 2s;">🌶️</div>
-    <div class="particle" style="left: 30%; animation-delay: 4s;">🥥</div>
-    <div class="particle" style="left: 40%; animation-delay: 1s;">💚</div>
-    <div class="particle" style="left: 50%; animation-delay: 3s;">🍃</div>
-    <div class="particle" style="left: 60%; animation-delay: 5s;">❤️</div>
-    <div class="particle" style="left: 70%; animation-delay: 2.5s;">🥔</div>
-    <div class="particle" style="left: 80%; animation-delay: 4.5s;">🧀</div>
-    <div class="particle" style="left: 90%; animation-delay: 1.5s;">✨</div>
+    <!-- Background Music -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1 class="hero-title">Dosa Love 🥘</h1>
-        <p class="hero-subtitle">Made with <span class="heart">❤️</span> for my Cutie</p>
-        <div class="dosa-hero">🥘</div>
-        <p style="font-size: 1.2rem; color: #8b4513;">
-            Jab bhi tujhe bhook lage, yahan aa jaana! 😋
-        </p>
-        <div class="scroll-indicator">👇</div>
-    </section>
+    <!-- Controls -->
+    <div class="controls">
+        <button class="control-btn music-btn" id="musicBtn" onclick="toggleMusic()" title="Music On/Off">
+            🎵
+        </button>
+        <button class="control-btn theme-btn" id="themeBtn" onclick="toggleTheme()" title="Dark/Light Mode">
+            🌙
+        </button>
+    </div>
 
-    <!-- Dosa Varieties -->
-    <section class="section">
-        <h2 class="section-title">🥘 Dosa Varieties</h2>
-        <div class="dosa-grid">
-            
-            <!-- Plain Dosa -->
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
-                    🥘
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">Plain Dosa (Sada Dosa)</h3>
-                    <div class="dosa-rating">
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                    </div>
-                    <p class="dosa-description">
-                        Crispy, golden brown, simple aur tasty! 
-                        Bas fermented batter se bana, bilkul classic South Indian style. 
-                        Sambhar aur chutney ke saath perfect hai! 😍
-                    </p>
-                    <div class="dosa-tags">
-                        <span class="tag">🌱 Veg</span>
-                        <span class="tag">🔥 Crispy</span>
-                        <span class="tag">💛 Classic</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Aloo Dosa -->
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);">
-                    🥔🥘
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">Aloo Masala Dosa</h3>
-                    <div class="dosa-rating">
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                    </div>
-                    <p class="dosa-description">
-                        Andar mein spicy aloo ki sabzi, 
-                        bahar se crispy dosa! Pyaaz, curry leaves, 
-                        aur haldi ke saath bana masala - ekdum mast! 🔥
-                    </p>
-                    <div class="dosa-tags">
-                        <span class="tag">🥔 Potato</span>
-                        <span class="tag">🌶️ Spicy</span>
-                        <span class="tag">👑 Popular</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Paneer Aloo Dosa -->
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    🧀🥔🥘
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">Paneer Aloo Dosa</h3>
-                    <div class="dosa-rating">
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                    </div>
-                    <p class="dosa-description">
-                        Aloo masala mein soft paneer cubes! 
-                        Creamy + Spicy = Perfect combo! 
-                        Tere jaise cutie ke liye perfect hai ye! 😘
-                    </p>
-                    <div class="dosa-tags">
-                        <span class="tag">🧀 Paneer</span>
-                        <span class="tag">🥔 Aloo</span>
-                        <span class="tag">💜 Premium</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Cheese Dosa -->
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    🧀🥘
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">Cheese Dosa</h3>
-                    <div class="dosa-rating">
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                    </div>
-                    <p class="dosa-description">
-                        Melting cheese ke saath hot dosa! 
-                        Cheesy, gooey, aur bohot yummy! 
-                        Cheese lovers ke liye heaven! 🤤
-                    </p>
-                    <div class="dosa-tags">
-                        <span class="tag">🧀 Extra Cheese</span>
-                        <span class="tag">😋 Cheesy</span>
-                        <span class="tag">❤️ Favourite</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mysore Masala Dosa -->
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);">
-                    🌶️🥘
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">Mysore Masala Dosa</h3>
-                    <div class="dosa-rating">
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                    </div>
-                    <p class="dosa-description">
-                        Special red chutney spread inside! 
-                        Spicy, crispy aur full of flavour! 
-                        Mysore ki shaan! 🔥🔥
-                    </p>
-                    <div class="dosa-tags">
-                        <span class="tag">🌶️ Extra Spicy</span>
-                        <span class="tag">🔴 Red Chutney</span>
-                        <span class="tag">🏆 Special</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Paper Dosa -->
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #c2e59c 0%, #64b3f4 100%);">
-                    📜🥘
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">Paper Roast Dosa</h3>
-                    <div class="dosa-rating">
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                        <span class="star">⭐</span>
-                    </div>
-                    <p class="dosa-description">
-                        Paper jaisa patla, 2 feet lamba! 
-                        Super crispy aur impressive! 
-                        Insta worthy for sure! 📸
-                    </p>
-                    <div class="dosa-tags">
-                        <span class="tag">📏 Extra Long</span>
-                        <span class="tag">🔥 Super Crispy</span>
-                        <span class="tag">📸 Insta</span>
-                    </div>
-                </div>
-            </div>
-
+    <!-- Sound Indicator -->
+    <div class="sound-indicator" id="soundIndicator">
+        <div class="sound-bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
         </div>
-    </section>
+        <span>Now Playing</span>
+    </div>
 
-    <!-- Chutney Section -->
-    <section class="chutney-section">
-        <h2 class="section-title">🥣 3 Special Chutneys</h2>
-        <div class="chutney-grid">
-            
+    <!-- Header -->
+    <header class="header">
+        <h1>🎮 Dosa Dipping Game</h1>
+        <p>Made with ❤️ for my Cutie</p>
+    </header>
+
+    <!-- Score Board -->
+    <div class="score-board">
+        <div class="score-item">
+            <div class="label">Total Dips</div>
+            <div class="value" id="totalDips">0</div>
+        </div>
+        <div class="score-item">
+            <div class="label">Yummy Points</div>
+            <div class="value" id="yummyPoints">0</div>
+        </div>
+        <div class="score-item">
+            <div class="label">Current Dosa</div>
+            <div class="value" id="currentDosa">🥘</div>
+        </div>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions">
+        <h3>📖 Kaise Khelna Hai:</h3>
+        <p>
+            1. Pehle neeche se <strong>Dosa type</strong> choose karo 👇<br>
+            2. Dosa ko <strong>drag</strong> karke chutney ya sambar pe le jao 🖱️<br>
+            3. Bowl pe chhodh do - <strong>DIP</strong> ho jayega! 💦<br>
+            4. Jitna dip, utna yummy! 😋
+        </p>
+    </div>
+
+    <!-- Dosa Type Selector -->
+    <div class="dosa-selector">
+        <button class="dosa-type-btn active" data-type="plain" data-name="Sada Dosa">
+            Sada Dosa
+        </button>
+        <button class="dosa-type-btn" data-type="aloo" data-name="Aloo Masala">
+            Aloo Masala
+        </button>
+        <button class="dosa-type-btn" data-type="paneer" data-name="Paneer Aloo">
+            Paneer Aloo
+        </button>
+        <button class="dosa-type-btn" data-type="cheese" data-name="Cheese Dosa">
+            Cheese Dosa
+        </button>
+        <button class="dosa-type-btn" data-type="mysore" data-name="Mysore Masala">
+            Mysore Masala
+        </button>
+        <button class="dosa-type-btn" data-type="paper" data-name="Paper Roast">
+            Paper Roast
+        </button>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container">
+        <!-- Dosa Plate -->
+        <div class="dosa-plate">
+            <div class="plate">
+                <div class="dosa" id="dosa" draggable="true">
+                    <span class="filling" id="dosaFilling">Sada Dosa</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dipping Section -->
+        <div class="dipping-section">
+            <h3>👇 Yahan Dip Karo! 👇</h3>
+
             <!-- Coconut Chutney -->
-            <div class="chutney-card">
-                <span class="chutney-icon">🥥</span>
-                <div class="chutney-color" style="background: linear-gradient(135deg, #f5f5dc, #e8e8d0);"></div>
-                <h3 class="chutney-name">Coconut Chutney</h3>
-                <p class="chutney-desc">
-                    Fresh nariyal, roasted chana dal, 
-                    green chillies aur tadka! 
-                    Creamy, mild aur refreshing! 
-                    South Indian classic! 🌴
-                </p>
+            <div class="bowl coconut" data-name="Coconut Chutney" data-hindi="नारियल चटनी">
+                <div class="bowl-container">
+                    <div class="bowl-outer">
+                        <div class="bowl-inner"></div>
+                    </div>
+                    <div class="dip-count" id="coconutCount">0</div>
+                </div>
+                <div class="bowl-label">Coconut Chutney</div>
+                <div class="bowl-hindi">नारियल चटनी</div>
             </div>
 
             <!-- Tomato Chutney -->
-            <div class="chutney-card">
-                <span class="chutney-icon">🍅</span>
-                <div class="chutney-color" style="background: linear-gradient(135deg, #ff6347, #dc143c);"></div>
-                <h3 class="chutney-name">Tomato Chutney</h3>
-                <p class="chutney-desc">
-                    Tangy tomatoes, red chillies, 
-                    garlic aur tamarind! 
-                    Sweet, sour aur spicy! 
-                    Ekdum perfect balance! 🔥
-                </p>
+            <div class="bowl tomato" data-name="Tomato Chutney" data-hindi="टमाटर चटनी">
+                <div class="bowl-container">
+                    <div class="bowl-outer">
+                        <div class="bowl-inner"></div>
+                    </div>
+                    <div class="dip-count" id="tomatoCount">0</div>
+                </div>
+                <div class="bowl-label">Tomato Chutney</div>
+                <div class="bowl-hindi">टमाटर चटनी</div>
             </div>
 
-            <!-- Green Chutney / Mint -->
-            <div class="chutney-card">
-                <span class="chutney-icon">🌿</span>
-                <div class="chutney-color" style="background: linear-gradient(135deg, #228b22, #32cd32);"></div>
-                <h3 class="chutney-name">Pudina Chutney</h3>
-                <p class="chutney-desc">
-                    Fresh mint, coriander, 
-                    green chillies aur lemon! 
-                    Refreshing aur cooling! 
-                    Garam dosa ke saath best! 💚
-                </p>
+            <!-- Pudina Chutney -->
+            <div class="bowl pudina" data-name="Pudina Chutney" data-hindi="पुदीना चटनी">
+                <div class="bowl-container">
+                    <div class="bowl-outer">
+                        <div class="bowl-inner"></div>
+                    </div>
+                    <div class="dip-count" id="pudinaCount">0</div>
+                </div>
+                <div class="bowl-label">Pudina Chutney</div>
+                <div class="bowl-hindi">पुदीना चटनी</div>
             </div>
 
+            <!-- Sambar -->
+            <div class="bowl sambar" data-name="Sambar" data-hindi="सांभर">
+                <div class="bowl-container">
+                    <div class="bowl-outer">
+                        <div class="bowl-inner"></div>
+                    </div>
+                    <div class="dip-count" id="sambarCount">0</div>
+                </div>
+                <div class="bowl-label">Sambar</div>
+                <div class="bowl-hindi">सांभर 🔥</div>
+            </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Special Combo -->
-    <section class="combo-section">
-        <h2 class="section-title">🎁 Special Combo for You</h2>
-        <div class="combo-box">
-            <div class="combo-items">
-                <span>🥘</span>
-                <span class="plus">+</span>
-                <span>🥥</span>
-                <span class="plus">+</span>
-                <span>🍅</span>
-                <span class="plus">+</span>
-                <span>🌿</span>
-                <span class="plus">+</span>
-                <span>☕</span>
-            </div>
-            <h3 class="combo-title">Dosa Thali Complete!</h3>
-            <p class="combo-desc">
-                Ek crispy dosa + teeno chutneys + garam sambhar + filter coffee! 
-                <br>Bas yehi chahiye life mein! 😋
-            </p>
-            <button class="order-btn" onclick="showLove()">Order with Love 💕</button>
-        </div>
-    </section>
-
-    <!-- Love Message Section -->
+    <!-- Love Section -->
     <section class="love-section">
-        <div class="love-message">
-            <span class="love-emoji">💕</span>
-            <p>
-                "Jaise dosa ko chutney complete karti hai, 
-                <br>waise tu meri life complete karti hai! 
-                <br><br>
-                Chahe koi bhi masala ho life mein, 
-                <br>tere saath sab tasty hai! 🥘❤️"
-            </p>
-            <span class="love-emoji">😘</span>
-        </div>
-    </section>
-
-    <!-- Fun Facts -->
-    <section class="section">
-        <h2 class="section-title">🤓 Fun Dosa Facts</h2>
-        <div class="dosa-grid">
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); font-size: 4rem;">
-                    📜
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">Ancient History</h3>
-                    <p class="dosa-description">
-                        Dosa 1st century AD se hai! 
-                        Tamil Nadu aur Karnataka mein originate hua. 
-                        Itna purana aur abhi bhi favourite! 🏛️
-                    </p>
-                </div>
-            </div>
-            
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); font-size: 4rem;">
-                    🌍
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">World Famous</h3>
-                    <p class="dosa-description">
-                        Ab dosa puri duniya mein famous hai! 
-                        USA, UK, everywhere log dosa khaate hain! 
-                        Indian food ki shaan! 🇮🇳
-                    </p>
-                </div>
-            </div>
-
-            <div class="dosa-card">
-                <div class="dosa-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); font-size: 4rem;">
-                    💪
-                </div>
-                <div class="dosa-content">
-                    <h3 class="dosa-name">Healthy Choice</h3>
-                    <p class="dosa-description">
-                        Fermented food toh healthy hai! 
-                        Probiotics, protein, low fat! 
-                        Taste bhi, health bhi! 🥗
-                    </p>
-                </div>
-            </div>
-        </div>
+        <span class="love-emoji">💕</span>
+        <h2>For My Cutie!</h2>
+        <p>
+            "Jaise dosa ko chutney complete karti hai,<br>
+            waise tu meri life complete karti hai!<br><br>
+            Aur jaise sambar mein sab kuch hai,<br>
+            waise mere dil mein bas tu hai! 🥘❤️"
+        </p>
+        <span class="love-emoji">😘</span>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p style="font-size: 1.5rem; margin-bottom: 1rem;">🥘 Made with ❤️ for my Cutie 🥘</p>
-        <p>Jab bhi miss kare, yahan aa jaana!</p>
-        <p style="margin-top: 1rem; opacity: 0.7;">
-            © 2024 Dosa Love | All rights reserved with extra chutney 😋
-        </p>
+        <p style="font-size: 1.3rem; margin-bottom: 0.5rem;">🥘 Dosa Love Game 🥘</p>
+        <p>Made with ❤️ | Jab bhi yaad aaye, khel lena!</p>
     </footer>
 
+    <!-- Message Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="message-popup" id="messagePopup">
+        <span class="emoji" id="popupEmoji">😋</span>
+        <h2 id="popupTitle">Yummy!</h2>
+        <p id="popupMessage">Dosa + Chutney = Perfect!</p>
+        <button class="close-btn" onclick="closePopup()">Aur Khao! 🥘</button>
+    </div>
+
     <script>
-        // Smooth scroll
-        document.querySelector('.scroll-indicator').addEventListener('click', () => {
-            window.scrollBy({
-                top: window.innerHeight,
-                behavior: 'smooth'
+        // Variables
+        const dosa = document.getElementById('dosa');
+        const dosaFilling = document.getElementById('dosaFilling');
+        const bowls = document.querySelectorAll('.bowl');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const themeBtn = document.getElementById('themeBtn');
+        const soundIndicator = document.getElementById('soundIndicator');
+        
+        let totalDips = 0;
+        let yummyPoints = 0;
+        let currentDosaType = 'plain';
+        let isMusicPlaying = false;
+        let isDarkMode = false;
+        
+        // Dip counts
+        let dipCounts = {
+            coconut: 0,
+            tomato: 0,
+            pudina: 0,
+            sambar: 0
+        };
+
+        // Messages for dipping
+        const messages = {
+            coconut: [
+                { emoji: "🥥", title: "Nariyal Chutney!", msg: "Creamy aur tasty!" },
+                { emoji: "😋", title: "Perfect Dip!", msg: "South Indian vibes!" },
+                { emoji: "💛", title: "Yummy!", msg: "Coconut love!" }
+            ],
+            tomato: [
+                { emoji: "🍅", title: "Tomato Chutney!", msg: "Tangy aur spicy!" },
+                { emoji: "🔥", title: "Mast Hai!", msg: "Red hot love!" },
+                { emoji: "😍", title: "Zabardast!", msg: "Perfect balance!" }
+            ],
+            pudina: [
+                { emoji: "🌿", title: "Pudina Fresh!", msg: "Cooling effect!" },
+                { emoji: "💚", title: "Green Power!", msg: "Healthy aur tasty!" },
+                { emoji: "😎", title: "Refreshing!", msg: "Mint lover!" }
+            ],
+            sambar: [
+                { emoji: "🥘", title: "Sambar Dive!", msg: "Full South Indian!" },
+                { emoji: "🔥", title: "Garam Sambar!", msg: "Ekdum mast!" },
+                { emoji: "😋", title: "Perfect Combo!", msg: "Dosa + Sambar = Love!" }
+            ]
+        };
+
+        // Special messages for milestones
+        const milestoneMessages = [
+            { dips: 5, emoji: "🎉", title: "5 Dips Done!", msg: "Tera cutie khush hai!" },
+            { dips: 10, emoji: "🏆", title: "10 Dips!", msg: "Expert dipper ban gaya!" },
+            { dips: 20, emoji: "👑", title: "Dosa King!", msg: "Tera cutie pagal hai tere pe!" },
+            { dips: 50, emoji: "💕", title: "Ultimate Foodie!", msg: "I love you 3000! ❤️" }
+        ];
+
+        // Dosa type selector
+        document.querySelectorAll('.dosa-type-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.dosa-type-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentDosaType = btn.dataset.type;
+                dosaFilling.textContent = btn.dataset.name;
+                document.getElementById('currentDosa').textContent = btn.dataset.name;
+                
+                // Visual feedback
+                dosa.style.transform = 'scale(1.1)';
+                setTimeout(() => dosa.style.transform = 'scale(1)', 200);
             });
         });
 
-        // Order button fun
-        function showLove() {
-            const messages = [
-                "Order aa gaya! Ab tu bana ke khila de! 😋",
-                "Khaana ready! Bas tu aa ja! 💕",
-                "Love delivered! Ab milo jaldi! 🥰",
-                "Bohot bhook lagi? Main bhi! 😘",
-                "Dosa ready, tu ready? 🥘❤️"
-            ];
-            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-            alert(randomMessage);
+        // Drag and Drop
+        let isDragging = false;
+        let startX, startY, initialX, initialY;
+
+        dosa.addEventListener('mousedown', startDrag);
+        dosa.addEventListener('touchstart', startDrag, { passive: false });
+
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag, { passive: false });
+
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
+
+        function startDrag(e) {
+            isDragging = true;
+            dosa.classList.add('dragging');
             
-            // Add confetti effect
-            createConfetti();
+            if (e.type === 'touchstart') {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            } else {
+                startX = e.clientX;
+                startY = e.clientY;
+            }
+            
+            const rect = dosa.getBoundingClientRect();
+            initialX = rect.left;
+            initialY = rect.top;
+            
+            dosa.style.position = 'fixed';
+            dosa.style.left = initialX + 'px';
+            dosa.style.top = initialY + 'px';
+            dosa.style.zIndex = '1000';
         }
 
-        // Confetti effect
-        function createConfetti() {
-            const emojis = ['🥘', '❤️', '🥥', '🍅', '🌿', '✨', '💕'];
-            for (let i = 0; i < 30; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-                    confetti.style.cssText = `
-                        position: fixed;
-                        top: -50px;
-                        left: ${Math.random() * 100}%;
-                        font-size: ${Math.random() * 2 + 1}rem;
-                        z-index: 9999;
-                        pointer-events: none;
-                        animation: fall 3s ease-out forwards;
-                    `;
-                    document.body.appendChild(confetti);
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            let currentX, currentY;
+            if (e.type === 'touchmove') {
+                currentX = e.touches[0].clientX;
+                currentY = e.touches[0].clientY;
+            } else {
+                currentX = e.clientX;
+                currentY = e.clientY;
+            }
+            
+            const deltaX = currentX - startX;
+            const deltaY = currentY - startY;
+            
+            dosa.style.left = (initialX + deltaX) + 'px';
+            dosa.style.top = (initialY + deltaY) + 'px';
+        }
+
+        function endDrag(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            dosa.classList.remove('dragging');
+            
+            // Check if dropped on a bowl
+            const dosaRect = dosa.getBoundingClientRect();
+            const dosaCenterX = dosaRect.left + dosaRect.width / 2;
+            const dosaCenterY = dosaRect.top + dosaRect.height / 2;
+            
+            let dipped = false;
+            
+            bowls.forEach(bowl => {
+                const bowlRect = bowl.getBoundingClientRect();
+                
+                if (dosaCenterX >= bowlRect.left && 
+                    dosaCenterX <= bowlRect.right && 
+                    dosaCenterY >= bowlRect.top && 
+                    dosaCenterY <= bowlRect.bottom) {
                     
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 50);
+                    // Dipped!
+                    dipped = true;
+                    handleDip(bowl);
+                }
+            });
+            
+            // Reset dosa position
+            resetDosaPosition();
+        }
+
+        function resetDosaPosition() {
+            dosa.style.position = 'relative';
+            dosa.style.left = '';
+            dosa.style.top = '';
+            dosa.style.zIndex = '100';
+        }
+
+        function handleDip(bowl) {
+            const bowlType = bowl.classList[1]; // coconut, tomato, pudina, sambar
+            
+            // Increment counts
+            dipCounts[bowlType]++;
+            totalDips++;
+            yummyPoints += bowlType === 'sambar' ? 15 : 10;
+            
+            // Update UI
+            document.getElementById(`${bowlType}Count`).textContent = dipCounts[bowlType];
+            document.getElementById('totalDips').textContent = totalDips;
+            document.getElementById('yummyPoints').textContent = yummyPoints;
+            
+            // Bowl animation
+            bowl.classList.add('dipping');
+            setTimeout(() => bowl.classList.remove('dipping'), 500);
+            
+            // Create splash effect
+            createSplash(bowl, bowlType);
+            
+            // Show yummy text
+            showYummyText(bowl);
+            
+            // Check for milestone
+            const milestone = milestoneMessages.find(m => m.dips === totalDips);
+            if (milestone) {
+                setTimeout(() => showPopup(milestone.emoji, milestone.title, milestone.msg), 500);
+            } else if (totalDips % 3 === 0) {
+                // Random message every 3 dips
+                const msgs = messages[bowlType];
+                const randomMsg = msgs[Math.floor(Math.random() * msgs.length)];
+                setTimeout(() => showPopup(randomMsg.emoji, randomMsg.title, randomMsg.msg), 300);
             }
         }
 
-        // Add fall animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                to {
-                    transform: translateY(100vh) rotate(720deg);
-                    opacity: 0;
-                }
+        function createSplash(bowl, type) {
+            const colors = {
+                coconut: '#f5f5dc',
+                tomato: '#ff6347',
+                pudina: '#32cd32',
+                sambar: '#d2691e'
+            };
+            
+            const bowlRect = bowl.querySelector('.bowl-inner').getBoundingClientRect();
+            
+            for (let i = 0; i < 8; i++) {
+                const splash = document.createElement('div');
+                splash.className = 'splash';
+                splash.style.background = colors[type];
+                splash.style.left = (bowlRect.left + bowlRect.width/2) + 'px';
+                splash.style.top = (bowlRect.top + 20) + 'px';
+                splash.style.setProperty('--tx', (Math.random() - 0.5) * 100 + 'px');
+                splash.style.setProperty('--ty', (Math.random() - 0.5) * 100 + 'px');
+                document.body.appendChild(splash);
+                
+                setTimeout(() => splash.remove(), 600);
             }
-        `;
-        document.head.appendChild(style);
+        }
 
-        // Card hover sound effect (visual feedback)
-        document.querySelectorAll('.dosa-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-15px) scale(1.02)';
+        function showYummyText(bowl) {
+            const texts = ['Yummy!', 'Tasty!', 'Mast!', 'Wow!', 'Nice!', '😋'];
+            const text = texts[Math.floor(Math.random() * texts.length)];
+            
+            const yummy = document.createElement('div');
+            yummy.className = 'yummy-text';
+            yummy.textContent = text;
+            
+            const rect = bowl.getBoundingClientRect();
+            yummy.style.left = rect.left + rect.width/2 - 30 + 'px';
+            yummy.style.top = rect.top + 'px';
+            
+            document.body.appendChild(yummy);
+            setTimeout(() => yummy.remove(), 1000);
+        }
+
+        function showPopup(emoji, title, msg) {
+            document.getElementById('popupEmoji').textContent = emoji;
+            document.getElementById('popupTitle').textContent = title;
+            document.getElementById('popupMessage').textContent = msg;
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('messagePopup').classList.add('show');
+        }
+
+        function closePopup() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('messagePopup').classList.remove('show');
+        }
+
+        // Click on bowl also works
+        bowls.forEach(bowl => {
+            bowl.addEventListener('click', () => {
+                handleDip(bowl);
             });
         });
 
-        // Console easter egg
-        console.log('%c🥘 Dosa Love 🥘', 'font-size: 30px; color: #8b4513;');
+        // Music toggle
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicBtn.textContent = '🎵';
+                musicBtn.classList.remove('playing');
+                soundIndicator.classList.remove('show');
+            } else {
+                bgMusic.play();
+                musicBtn.textContent = '🎶';
+                musicBtn.classList.add('playing');
+                soundIndicator.classList.add('show');
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            if (isDarkMode) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeBtn.textContent = '☀️';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeBtn.textContent = '🌙';
+            }
+        }
+
+        // Check saved theme
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            themeBtn.textContent = '☀️';
+            isDarkMode = true;
+        }
+
+        // Console message
+        console.log('%c🥘 Dosa Dipping Game 🥘', 'font-size: 30px; color: #8b4513;');
         console.log('%cMade with ❤️ for someone special!', 'font-size: 16px; color: #ff6b6b;');
     </script>
 </body>
-  </html>
+    </html>
