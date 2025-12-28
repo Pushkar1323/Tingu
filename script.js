@@ -832,5 +832,6 @@ document.head.appendChild(extraStyles);
 
 // ========== CONSOLE MESSAGE ==========
 console.log('%c🥘 Dosa Love Game 🥘', 'font-size: 35px; color: #8b4513; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);');
-console.log('%cMade with ❤️ by Pucchu for Cutie!', 'font-size: 18px; color: #ff6b6b; font-weight: bold;');
-console.log('%c💕 I Love You! 💕', 'font-size: 16px; color: #ff69b4;');
+console.log('%c💋 Made by Pucchu for Appuu 💋', 'font-size: 20px; color: #ff69b4; font-weight: bold;');
+console.log('%cMwahhh! 😘💕', 'font-size: 18px; color: #ff1493;');
+console.log('%cI Love You Appuu cutuuu! ❤️', 'font-size: 22px; color: #ff6b6b; font-weight: bold;');
