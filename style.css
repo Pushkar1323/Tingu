@@ -1679,3 +1679,78 @@ body {
     .love-section h2 { font-size: 2rem; }
     .love-message { font-size: 1.1rem; }
   }
+/* ========== SPECIAL FOOTER FOR APPUU ========== */
+.footer-love {
+    font-size: 1.3rem;
+    margin: 0.5rem 0;
+}
+
+.pucchu {
+    background: linear-gradient(45deg, #ff6b6b, #feca57);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    font-size: 1.5rem;
+    animation: glowText 2s infinite;
+}
+
+.appu {
+    background: linear-gradient(45deg, #ff69b4, #ff1493, #ff69b4);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 900;
+    font-size: 1.6rem;
+    animation: gradient 2s ease infinite, pulseAppu 1s infinite;
+}
+
+@keyframes glowText {
+    0%, 100% { filter: drop-shadow(0 0 5px rgba(255,107,107,0.5)); }
+    50% { filter: drop-shadow(0 0 15px rgba(254,202,87,0.8)); }
+}
+
+@keyframes pulseAppu {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.footer-kiss {
+    font-size: 1.8rem;
+    margin: 1rem 0;
+    animation: kissAnim 2s infinite;
+}
+
+@keyframes kissAnim {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1) rotate(-5deg); }
+    50% { transform: scale(1.2); }
+    75% { transform: scale(1.1) rotate(5deg); }
+}
+
+.footer::before,
+.footer::after {
+    content: '💕';
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.3;
+    animation: floatFooterHeart 4s infinite ease-in-out;
+}
+
+.footer::before {
+    left: 10%;
+    top: 20%;
+}
+
+.footer::after {
+    right: 10%;
+    bottom: 20%;
+    content: '💋';
+    animation-delay: 2s;
+}
+
+@keyframes floatFooterHeart {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(10deg); }
+    }
