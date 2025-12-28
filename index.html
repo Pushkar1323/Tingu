@@ -5,887 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🥘 Dosa Love Game - For My Cutie 💕</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: linear-gradient(135deg, #fff5e6 0%, #ffe4c4 100%);
-            --bg-secondary: #fff8f0;
-            --text-primary: #8b4513;
-            --text-secondary: #666;
-            --card-bg: #ffffff;
-        }
-
-        [data-theme="dark"] {
-            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            --bg-secondary: #1f1f3d;
-            --text-primary: #ffd700;
-            --text-secondary: #b8b8d1;
-            --card-bg: #2d2d5a;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            transition: all 0.5s ease;
-            cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 100 100"><text y=".9em" font-size="80">🥄</text></svg>'), auto;
-        }
-
-        /* Floating Background */
-        .floating-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .floating-item {
-            position: absolute;
-            opacity: 0.15;
-            animation: floatAround 20s infinite linear;
-        }
-
-        @keyframes floatAround {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.15; }
-            90% { opacity: 0.15; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
-        }
-
-        /* Controls */
-        .controls {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 12px;
-            z-index: 1000;
-        }
-
-        .ctrl-btn {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .music-btn { background: linear-gradient(135deg, #ff6b6b, #feca57); }
-        .theme-btn { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .sound-btn { background: linear-gradient(135deg, #11998e, #38ef7d); }
-
-        .ctrl-btn:hover { transform: scale(1.15) rotate(10deg); }
-        .ctrl-btn.active { animation: pulse 1s infinite; }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255,107,107,0.7); }
-            50% { transform: scale(1.1); box-shadow: 0 0 20px 10px rgba(255,107,107,0); }
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            padding: 2.5rem 2rem;
-            background: var(--bg-secondary);
-            border-bottom: 4px dashed var(--text-primary);
-            position: relative;
-            z-index: 1;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, #ff6b6b, #feca57, #ff6b6b);
-            background-size: 200% 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: gradient 3s ease infinite;
-        }
-
-        @keyframes gradient {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .header p {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            margin-top: 0.5rem;
-        }
-
-        .header .heart {
-            display: inline-block;
-            animation: heartbeat 1s infinite;
-            color: #ff6b6b;
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-
-        /* Stats Board */
-        .stats-board {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            padding: 1.5rem;
-            background: var(--card-bg);
-            margin: 1rem;
-            border-radius: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        .stat-box {
-            text-align: center;
-            padding: 1rem 1.5rem;
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            min-width: 100px;
-            transition: transform 0.3s ease;
-        }
-
-        .stat-box:hover { transform: translateY(-5px) scale(1.05); }
-        .stat-box .icon { font-size: 1.8rem; }
-        .stat-box .label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; }
-        .stat-box .value { font-size: 1.6rem; font-weight: 800; color: var(--text-primary); }
-
-        /* Love Meter */
-        .love-meter-wrap {
-            position: fixed;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .love-meter {
-            width: 35px;
-            height: 180px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.2);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .love-fill {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, #ff6b6b, #ff9a9e, #fecfef);
-            transition: height 0.5s ease;
-            border-radius: 0 0 20px 20px;
-        }
-
-        .love-heart { font-size: 1.5rem; animation: heartbeat 1s infinite; }
-        .love-label { writing-mode: vertical-rl; color: var(--text-primary); font-weight: 700; font-size: 0.8rem; }
-
-        /* Combo Display */
-        .combo-popup {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%) scale(0);
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 0.8rem 2rem;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 1.3rem;
-            box-shadow: 0 10px 40px rgba(102,126,234,0.5);
-            z-index: 1000;
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .combo-popup.show { transform: translateX(-50%) scale(1); }
-
-        /* Achievement */
-        .achievement-popup {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-150px);
-            background: linear-gradient(135deg, #ffd700, #ffb700);
-            color: #8b4513;
-            padding: 1rem 2rem;
-            border-radius: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 10px 40px rgba(255,215,0,0.5);
-            z-index: 2000;
-            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .achievement-popup.show { transform: translateX(-50%) translateY(0); }
-        .achievement-popup .badge-icon { font-size: 2rem; }
-
-        /* Dosa Selector */
-        .dosa-selector {
-            display: flex;
-            justify-content: center;
-            gap: 0.6rem;
-            margin: 1.5rem 0.5rem;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        .dosa-btn {
-            padding: 0.7rem 1rem;
-            border: 3px solid transparent;
-            background: var(--card-bg);
-            color: var(--text-primary);
-            border-radius: 18px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-            min-width: 80px;
-        }
-
-        .dosa-btn:hover { transform: translateY(-5px) scale(1.05); }
-
-        .dosa-btn.active {
-            background: linear-gradient(135deg, #ff6b6b, #feca57);
-            color: white;
-            transform: scale(1.08);
-        }
-
-        .dosa-btn .emoji { font-size: 1.5rem; }
-        .dosa-btn .price { font-size: 0.65rem; opacity: 0.8; }
-
-        /* Game Area */
-        .game-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Kitchen Counter */
-        .kitchen-counter {
-            background: linear-gradient(180deg, #8b7355 0%, #6b5344 100%);
-            padding: 2rem;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            margin-bottom: 2rem;
-        }
-
-        /* Banana Leaf Plate */
-        .plate-container {
-            position: relative;
-            width: 380px;
-            height: 380px;
-        }
-
-        .banana-leaf {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #228b22 0%, #32cd32 30%, #228b22 50%, #006400 100%);
-            border-radius: 45% 55% 50% 50% / 50% 50% 50% 50%;
-            box-shadow: 
-                0 15px 40px rgba(0,0,0,0.4),
-                inset 0 0 60px rgba(0,100,0,0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Leaf Veins */
-        .leaf-vein {
-            position: absolute;
-            background: rgba(0,80,0,0.3);
-            border-radius: 50%;
-        }
-
-        .leaf-vein.center {
-            width: 3px;
-            height: 80%;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .leaf-vein.horizontal {
-            width: 80%;
-            height: 3px;
-            top: 50%;
-            left: 10%;
-            transform: translateY(-50%);
-        }
-
-        .leaf-vein.side {
-            width: 25%;
-            height: 2px;
-            transform-origin: left center;
-        }
-
-        .leaf-vein.side-1 { top: 30%; left: 55%; transform: rotate(25deg); }
-        .leaf-vein.side-2 { top: 40%; left: 55%; transform: rotate(15deg); }
-        .leaf-vein.side-3 { top: 60%; left: 55%; transform: rotate(-15deg); }
-        .leaf-vein.side-4 { top: 70%; left: 55%; transform: rotate(-25deg); }
-        .leaf-vein.side-5 { top: 30%; left: 45%; transform: rotate(155deg); }
-        .leaf-vein.side-6 { top: 40%; left: 45%; transform: rotate(165deg); }
-        .leaf-vein.side-7 { top: 60%; left: 45%; transform: rotate(-165deg); }
-        .leaf-vein.side-8 { top: 70%; left: 45%; transform: rotate(-155deg); }
-
-        /* Dosa Wrapper */
-        .dosa-wrapper {
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Steam */
-        .steam-box {
-            position: absolute;
-            top: -50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 60px;
-            pointer-events: none;
-        }
-
-        .steam {
-            position: absolute;
-            background: rgba(255,255,255,0.7);
-            border-radius: 50%;
-            filter: blur(3px);
-            animation: steamRise 2.5s infinite ease-out;
-            opacity: 0;
-        }
-
-        .steam:nth-child(1) { width: 12px; height: 12px; left: 20%; animation-delay: 0s; }
-        .steam:nth-child(2) { width: 18px; height: 18px; left: 40%; animation-delay: 0.4s; }
-        .steam:nth-child(3) { width: 14px; height: 14px; left: 60%; animation-delay: 0.8s; }
-        .steam:nth-child(4) { width: 16px; height: 16px; left: 75%; animation-delay: 1.2s; }
-        .steam:nth-child(5) { width: 10px; height: 10px; left: 35%; animation-delay: 1.6s; }
-
-        @keyframes steamRise {
-            0% { transform: translateY(0) scale(1); opacity: 0.8; }
-            100% { transform: translateY(-50px) scale(2); opacity: 0; }
-        }
-
-        /* DOSA - Main Star! */
-        .dosa {
-            width: 220px;
-            height: 120px;
-            background: linear-gradient(
-                180deg,
-                #e8c49a 0%,
-                #d4a574 15%,
-                #c4955a 35%,
-                #b8864d 55%,
-                #a67540 75%,
-                #8b6235 100%
-            );
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            cursor: grab;
-            position: relative;
-            box-shadow: 
-                0 12px 35px rgba(0,0,0,0.35),
-                inset 0 -10px 25px rgba(0,0,0,0.3),
-                inset 0 10px 20px rgba(255,255,255,0.15);
-            transition: all 0.2s ease;
-            user-select: none;
-            overflow: hidden;
-        }
-
-        .dosa:hover {
-            transform: scale(1.05);
-            box-shadow: 0 18px 45px rgba(0,0,0,0.4);
-        }
-
-        .dosa:active, .dosa.dragging {
-            cursor: grabbing;
-            transform: scale(1.12);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.45);
-        }
-
-        /* Dosa Texture */
-        .dosa-texture {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: inherit;
-            background-image: 
-                radial-gradient(circle at 12% 20%, rgba(139,69,19,0.35) 3px, transparent 3px),
-                radial-gradient(circle at 35% 12%, rgba(139,69,19,0.3) 2px, transparent 2px),
-                radial-gradient(circle at 58% 25%, rgba(139,69,19,0.35) 3px, transparent 3px),
-                radial-gradient(circle at 82% 18%, rgba(139,69,19,0.3) 2px, transparent 2px),
-                radial-gradient(circle at 20% 45%, rgba(139,69,19,0.3) 2px, transparent 2px),
-                radial-gradient(circle at 48% 50%, rgba(139,69,19,0.25) 4px, transparent 4px),
-                radial-gradient(circle at 75% 48%, rgba(139,69,19,0.35) 3px, transparent 3px),
-                radial-gradient(circle at 15% 72%, rgba(139,69,19,0.3) 2px, transparent 2px),
-                radial-gradient(circle at 40% 78%, rgba(139,69,19,0.35) 3px, transparent 3px),
-                radial-gradient(circle at 68% 75%, rgba(139,69,19,0.3) 2px, transparent 2px),
-                radial-gradient(circle at 88% 70%, rgba(139,69,19,0.35) 3px, transparent 3px);
-            pointer-events: none;
-        }
-
-        /* Dosa Golden Edge */
-        .dosa-edge {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 25%;
-            background: linear-gradient(180deg, rgba(255,215,0,0.25), transparent);
-            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-            pointer-events: none;
-        }
-
-        /* Dosa Crispy Edge Pattern */
-        .dosa-crispy {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 4px dashed rgba(139,69,19,0.25);
-            border-radius: inherit;
-            pointer-events: none;
-        }
-
-        /* ========== FILLING STYLES ========== */
-        .filling-container {
-            position: absolute;
-            top: 55%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 75%;
-            height: 45%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .filling-container.show { opacity: 1; }
-
-        /* Aloo Pieces */
-        .aloo-piece {
-            width: 22px;
-            height: 18px;
-            background: linear-gradient(135deg, #f4d03f 0%, #e9b824 50%, #c9980a 100%);
-            border-radius: 30% 70% 50% 50% / 50% 50% 70% 30%;
-            box-shadow: inset 0 -3px 6px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        /* Paneer Cubes */
-        .paneer-cube {
-            width: 16px;
-            height: 16px;
-            background: linear-gradient(135deg, #fffef0 0%, #f5f0d0 50%, #e8e0b0 100%);
-            border-radius: 3px;
-            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1), 0 2px 4px rgba(0,0,0,0.15);
-        }
-
-        /* Cheese Melted */
-        .cheese-layer {
-            position: absolute;
-            top: 40%;
-            left: 15%;
-            right: 15%;
-            height: 35%;
-            background: linear-gradient(180deg, #ffd700 0%, #ffa500 50%, #ff8c00 100%);
-            border-radius: 50%;
-            opacity: 0.85;
-            box-shadow: 0 3px 8px rgba(255,165,0,0.4);
-        }
-
-        .cheese-stretch {
-            position: absolute;
-            width: 6px;
-            height: 25px;
-            background: linear-gradient(180deg, #ffd700, #ffa500);
-            border-radius: 3px;
-            bottom: -20px;
-            animation: cheeseStretch 1.5s infinite ease-in-out;
-        }
-
-        .cheese-stretch:nth-child(1) { left: 25%; animation-delay: 0s; }
-        .cheese-stretch:nth-child(2) { left: 45%; animation-delay: 0.3s; height: 30px; }
-        .cheese-stretch:nth-child(3) { left: 65%; animation-delay: 0.6s; }
-
-        @keyframes cheeseStretch {
-            0%, 100% { transform: scaleY(1); }
-            50% { transform: scaleY(1.3); }
-        }
-
-        /* Mysore Red Chutney Layer */
-        .mysore-layer {
-            position: absolute;
-            top: 35%;
-            left: 12%;
-            right: 12%;
-            height: 40%;
-            background: linear-gradient(180deg, #dc143c 0%, #b22222 50%, #8b0000 100%);
-            border-radius: 50%;
-            opacity: 0.7;
-        }
-
-        /* Onion Pieces */
-        .onion-piece {
-            width: 18px;
-            height: 8px;
-            background: linear-gradient(90deg, #fff 0%, #ffe4e1 50%, #ffc0cb 100%);
-            border-radius: 50%;
-            opacity: 0.9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-        }
-
-        /* Rava Texture */
-        .rava-texture {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: 
-                radial-gradient(circle at 10% 15%, rgba(255,255,255,0.4) 2px, transparent 2px),
-                radial-gradient(circle at 25% 30%, rgba(255,255,255,0.3) 1.5px, transparent 1.5px),
-                radial-gradient(circle at 45% 20%, rgba(255,255,255,0.4) 2px, transparent 2px),
-                radial-gradient(circle at 65% 35%, rgba(255,255,255,0.3) 1.5px, transparent 1.5px),
-                radial-gradient(circle at 80% 25%, rgba(255,255,255,0.4) 2px, transparent 2px),
-                radial-gradient(circle at 20% 55%, rgba(255,255,255,0.3) 1.5px, transparent 1.5px),
-                radial-gradient(circle at 50% 60%, rgba(255,255,255,0.4) 2px, transparent 2px),
-                radial-gradient(circle at 75% 65%, rgba(255,255,255,0.3) 1.5px, transparent 1.5px),
-                radial-gradient(circle at 30% 80%, rgba(255,255,255,0.4) 2px, transparent 2px),
-                radial-gradient(circle at 60% 85%, rgba(255,255,255,0.3) 1.5px, transparent 1.5px);
-            border-radius: inherit;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .rava-texture.show { opacity: 1; }
-
-        /* Paper Dosa - Extra Long */
-        .dosa.paper-style {
-            width: 280px;
-            height: 80px;
-            border-radius: 45% 55% 50% 50% / 70% 70% 30% 30%;
-        }
-
-        /* Masala Dosa Fold */
-        .masala-fold {
-            position: absolute;
-            bottom: 10%;
-            left: 5%;
-            right: 5%;
-            height: 30%;
-            background: linear-gradient(180deg, transparent, rgba(139,69,19,0.3));
-            border-radius: 0 0 50% 50% / 0 0 100% 100%;
-            pointer-events: none;
-        }
-
-        /* Filling Badge */
-        .filling-badge {
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #ff6b6b, #feca57);
-            color: white;
-            padding: 5px 18px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-            z-index: 20;
-        }
-
-        /* Bite Marks */
-        .bite-mark {
-            position: absolute;
-            background: var(--bg-secondary);
-            border-radius: 50% 50% 50% 50%;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .bite-mark.show { opacity: 1; }
-
-        .bite-mark:nth-child(1) { width: 25px; height: 20px; top: 10%; right: 5%; }
-        .bite-mark:nth-child(2) { width: 20px; height: 18px; top: 40%; right: 2%; }
-        .bite-mark:nth-child(3) { width: 22px; height: 15px; bottom: 15%; right: 8%; }
-
-        /* Dipping Section */
-        .dipping-section {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            padding: 2.5rem 2rem;
-            background: var(--bg-secondary);
-            border-radius: 40px;
-            margin: 1rem;
-            width: 100%;
-            max-width: 1000px;
-            box-shadow: 
-                0 -10px 40px rgba(0,0,0,0.1),
-                inset 0 5px 25px rgba(255,255,255,0.5);
-        }
-
-        .dipping-section h3 {
-            width: 100%;
-            text-align: center;
-            color: var(--text-primary);
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
-        }
-
-        .dipping-section h3 .bounce { animation: bounce 1s infinite; display: inline-block; }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(8px); }
-        }
-
-        /* Bowl Styles */
-        .bowl {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .bowl:hover { transform: scale(1.12) translateY(-8px); }
-
-        .bowl.dipping { animation: dipAnim 0.6s ease; }
-
-        @keyframes dipAnim {
-            0% { transform: scale(1); }
-            30% { transform: scale(1.25) translateY(-5px); }
-            60% { transform: scale(0.95); }
-            100% { transform: scale(1); }
-        }
-
-        .bowl-wrap {
-            width: 105px;
-            height: 72px;
-            position: relative;
-            perspective: 600px;
-        }
-
-        .bowl-3d {
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transform: rotateX(12deg);
-        }
-
-        .bowl-body {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #a0522d 0%, #8b4513 50%, #654321 100%);
-            border-radius: 12px 12px 50% 50%;
-            position: relative;
-            box-shadow: 
-                0 12px 30px rgba(0,0,0,0.4),
-                inset 0 -18px 30px rgba(0,0,0,0.4),
-                inset 0 6px 12px rgba(255,255,255,0.1);
-            overflow: hidden;
-        }
-
-        .bowl-inner {
-            position: absolute;
-            top: 10px;
-            left: 8px;
-            right: 8px;
-            bottom: 6px;
-            border-radius: 8px 8px 50% 50%;
-            overflow: hidden;
-        }
-
-        /* Liquid */
-        .liquid {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 92%;
-            border-radius: 0 0 50% 50%;
-            position: relative;
-        }
-
-        .liquid::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 12px;
-            background: inherit;
-            filter: brightness(1.25);
-            animation: wave 2s infinite ease-in-out;
-            border-radius: 50%;
-        }
-
-        @keyframes wave {
-            0%, 100% { transform: translateX(-4px) skewX(-4deg); }
-            50% { transform: translateX(4px) skewX(4deg); }
-        }
-
-        .liquid::after {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 12%;
-            width: 40%;
-            height: 10px;
-            background: rgba(255,255,255,0.45);
-            border-radius: 50%;
-            filter: blur(2px);
-        }
-
-        /* Chutney Colors */
-        .coconut .liquid { background: linear-gradient(180deg, #f5f5dc 0%, #e8e4c9 50%, #d4d0b5 100%); }
-        .tomato .liquid { background: linear-gradient(180deg, #ff6347 0%, #dc143c 50%, #b22222 100%); }
-        .pudina .liquid { background: linear-gradient(180deg, #32cd32 0%, #228b22 50%, #006400 100%); }
-        .sambar .liquid { background: linear-gradient(180deg, #e07020 0%, #cd6a30 50%, #a55020 100%); }
-
-        /* Sambar - Bigger */
-        .sambar .bowl-wrap { width: 130px; height: 90px; }
-
-        /* Sambar Veggies */
-        .sambar-veggies {
-            position: absolute;
-            top: 12px;
-            left: 12%;
-            right: 12%;
-            height: 35px;
-            pointer-events: none;
-        }
-
-        .veggie {
-            position: absolute;
-            font-size: 0.85rem;
-            animation: floatVeggie 2.5s infinite ease-in-out;
-        }
-
-        .veggie:nth-child(1) { left: 5%; animation-delay: 0s; }
-        .veggie:nth-child(2) { left: 28%; animation-delay: 0.4s; }
-        .veggie:nth-child(3) { left: 52%; animation-delay: 0.8s; }
-        .veggie:nth-child(4) { left: 75%; animation-delay: 1.2s; }
-        .veggie:nth-child(5) { left: 18%; top: 12px; animation-delay: 1.6s; }
-        .veggie:nth-child(6) { left: 62%; top: 12px; animation-delay: 2s; }
-
-        @keyframes floatVeggie {
-            0%, 100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-4px) rotate(3deg); }
-        }
-
-        /* Dip Counter */
-        .dip-counter {
-            position: absolute;
-            top: -12px;
-            right: -12px;
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 0.85rem;
-            box-shadow: 0 4px 12px rgba(255,107,107,0.5);
-            border: 3px solid white;
-            z-index: 10;
-        }
-
-        .bowl-label {
-            margin-top: 0.8rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            font-size: 0.95rem;
-        }
-
-        .bowl-hindi {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- PART 2 CONTINUE KARO NEECHE SE -->
-        <!-- Background Music -->
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Sound Effects (Base64 encoded beep) -->
-    <audio id="dipSound" src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1sbJOehYSGoaRzU1F0nqGHg4WcoXdWVXecoISEhZ2bc1ZXeJ2fgoSGnJpwV1l6nZ6Bg4ecklxaW3udnIGEh5ySXFtefJ2agYWImZBYXF99nJmBhoqYjlZeYH6bl4GHjJeLU19hf5qVgYiOlYhRYGOAmpOCiZCThk9hZYGZkIKKkpGDTWJngpmOg4uUj4FMZG2DmIuEjZaNfktlb4WXiISPlop6SmdxhpWFhZGXhndJaHSIk4OGk5eDc0hqd4qQgYeVmH9wR2x6jI1/iJeae2xGbnyOin6JmJx3aEVwgJCHfIudnXNkRHKDkoR6i6CeblpsipKBeYymn2lVcY6Uf3WLqJ9mUXeSmXpxjauYYEt+mp5zbJKvk1hDh6GeaWWXsoZOOY+pm2BdmraBS8CYppVXV6q2gD+2qaeLUFe0t3w4s7GqiExYu7l2NLW1qoZIWsC7cC+6ua+EQ1zEvmorv72ygD9fyMJlKcTBt3w6Yc3FXybJxbt2NGLSyFgizsy+cC9k2MtSH9HQwGopZd3NTRzU1MJkJGjjzkcY2NjEXR5s6c9BE9zc"></audio>
-    <audio id="yummySound" src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1sbJOehYSGoaRzU1F0nqGHg4WcoXdWVXecoISEhZ2bc1ZXeJ2fgoSGnJpwV1l6nZ6Bg4ecklxaW3udnIGEh5ySXFtefJ2agYWImZBYXF99nJmBhoqYjlZeYH6bl4GHjJeLU19hf5qVgYiOlYhRYGOAmpOCiZCThk9hZYGZkIKKkpGDTWJngpmOg4uUj4FMZG2DmIuEjZaNfktlb4WXiISPlop6SmdxhpWFhZGXhndJaHSIk4OGk5eDc0hqd4qQgYeVmH9wR2x6jI1/iJeae2xGbnyOin6JmJx3aEVwgJCHfIudnXNkRHKDkoR6i6CeblpsipmBeYymn2lVcY6Uf3WL"></audio>
 
     <!-- Floating Background -->
     <div class="floating-bg" id="floatingBg"></div>
+
+    <!-- Chef Avatar -->
+    <div class="chef-container" id="chefContainer">
+        <div class="chef-avatar" id="chefAvatar">
+            <div class="chef-hat">👨‍🍳</div>
+        </div>
+        <div class="chef-speech" id="chefSpeech">Welcome Cutie!</div>
+    </div>
 
     <!-- Love Meter -->
     <div class="love-meter-wrap">
         <div class="love-heart">💕</div>
         <div class="love-meter">
-            <div class="love-fill" id="loveFill" style="height: 0%;"></div>
+            <div class="love-fill" id="loveFill"></div>
+            <div class="love-bubbles">
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+                <span class="bubble"></span>
+            </div>
         </div>
         <div class="love-label">LOVE</div>
     </div>
 
     <!-- Controls -->
     <div class="controls">
-        <button class="ctrl-btn music-btn" id="musicBtn" onclick="toggleMusic()" title="Music">🎵</button>
-        <button class="ctrl-btn sound-btn" id="soundBtn" onclick="toggleSound()" title="Sound Effects">🔊</button>
-        <button class="ctrl-btn theme-btn" id="themeBtn" onclick="toggleTheme()" title="Theme">🌙</button>
+        <button class="ctrl-btn music-btn" id="musicBtn" onclick="toggleMusic()">🎵</button>
+        <button class="ctrl-btn sound-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
+        <button class="ctrl-btn theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</button>
+        <button class="ctrl-btn challenge-btn" onclick="startChallenge()">⏱️</button>
+    </div>
+
+    <!-- Challenge Timer -->
+    <div class="challenge-popup" id="challengePopup">
+        <div class="challenge-timer" id="challengeTimer">30</div>
+        <div class="challenge-label">SECONDS LEFT!</div>
+        <div class="challenge-score">Dips: <span id="challengeScore">0</span></div>
     </div>
 
     <!-- Combo Popup -->
@@ -922,57 +83,102 @@
         </div>
         <div class="stat-box">
             <span class="icon">💕</span>
-            <div class="label">Love Lvl</div>
+            <div class="label">Love</div>
             <div class="value" id="loveLevel">1</div>
         </div>
         <div class="stat-box">
             <span class="icon">🏆</span>
-            <div class="label">Badges</div>
-            <div class="value" id="badgeCount">0</div>
+            <div class="label">Best</div>
+            <div class="value" id="highScore">0</div>
+        </div>
+    </div>
+
+    <!-- Toppings Customizer -->
+    <div class="toppings-section">
+        <h4>✨ Extra Toppings:</h4>
+        <div class="toppings-grid">
+            <button class="topping-btn" data-topping="butter" onclick="toggleTopping('butter')">
+                🧈 Butter
+            </button>
+            <button class="topping-btn" data-topping="ghee" onclick="toggleTopping('ghee')">
+                ✨ Ghee
+            </button>
+            <button class="topping-btn" data-topping="cheese" onclick="toggleTopping('cheese')">
+                🧀 Extra Cheese
+            </button>
+            <button class="topping-btn" data-topping="podi" onclick="toggleTopping('podi')">
+                🌶️ Gun Powder
+            </button>
+            <button class="topping-btn" data-topping="coriander" onclick="toggleTopping('coriander')">
+                🌿 Dhaniya
+            </button>
+            <button class="topping-btn" data-topping="onion" onclick="toggleTopping('onion')">
+                🧅 Onion
+            </button>
         </div>
     </div>
 
     <!-- Dosa Selector -->
     <div class="dosa-selector">
-        <button class="dosa-btn active" data-type="plain" data-name="Sada Dosa" data-price="₹40">
+        <button class="dosa-btn active" data-type="plain" data-name="Sada Dosa">
             <span class="emoji">🥘</span>
             <span>Sada</span>
-            <span class="price">₹40</span>
         </button>
-        <button class="dosa-btn" data-type="aloo" data-name="Aloo Masala" data-price="₹60">
+        <button class="dosa-btn" data-type="aloo" data-name="Aloo Masala">
             <span class="emoji">🥔</span>
             <span>Aloo</span>
-            <span class="price">₹60</span>
         </button>
-        <button class="dosa-btn" data-type="paneer" data-name="Paneer Aloo" data-price="₹90">
+        <button class="dosa-btn" data-type="paneer" data-name="Paneer Masala">
             <span class="emoji">🧀</span>
             <span>Paneer</span>
-            <span class="price">₹90</span>
         </button>
-        <button class="dosa-btn" data-type="cheese" data-name="Cheese Dosa" data-price="₹80">
+        <button class="dosa-btn" data-type="cheese" data-name="Cheese Dosa">
             <span class="emoji">🧀</span>
             <span>Cheese</span>
-            <span class="price">₹80</span>
         </button>
-        <button class="dosa-btn" data-type="mysore" data-name="Mysore Masala" data-price="₹70">
+        <button class="dosa-btn" data-type="mysore" data-name="Mysore Masala">
             <span class="emoji">🌶️</span>
             <span>Mysore</span>
-            <span class="price">₹70</span>
         </button>
-        <button class="dosa-btn" data-type="paper" data-name="Paper Roast" data-price="₹50">
+        <button class="dosa-btn" data-type="paper" data-name="Paper Roast">
             <span class="emoji">📜</span>
             <span>Paper</span>
-            <span class="price">₹50</span>
         </button>
-        <button class="dosa-btn" data-type="rava" data-name="Rava Dosa" data-price="₹55">
+        <button class="dosa-btn" data-type="rava" data-name="Rava Dosa">
             <span class="emoji">✨</span>
             <span>Rava</span>
-            <span class="price">₹55</span>
         </button>
-        <button class="dosa-btn" data-type="onion" data-name="Onion Dosa" data-price="₹55">
-            <span class="emoji">🧅</span>
-            <span>Onion</span>
-            <span class="price">₹55</span>
+        <button class="dosa-btn" data-type="egg" data-name="Egg Dosa">
+            <span class="emoji">🍳</span>
+            <span>Egg</span>
+        </button>
+    </div>
+
+    <!-- Cooking Section -->
+    <div class="cooking-section" id="cookingSection">
+        <div class="tawa">
+            <div class="tawa-surface">
+                <div class="tawa-heat"></div>
+                <div class="cooking-dosa" id="cookingDosa">
+                    <div class="batter-spread"></div>
+                </div>
+                <div class="oil-drops">
+                    <span class="oil"></span>
+                    <span class="oil"></span>
+                    <span class="oil"></span>
+                </div>
+            </div>
+            <div class="tawa-handle"></div>
+            <div class="flame-container">
+                <div class="flame"></div>
+                <div class="flame"></div>
+                <div class="flame"></div>
+                <div class="flame"></div>
+                <div class="flame"></div>
+            </div>
+        </div>
+        <button class="cook-btn" id="cookBtn" onclick="cookDosa()">
+            🍳 Cook Fresh Dosa!
         </button>
     </div>
 
@@ -983,20 +189,18 @@
             <!-- Banana Leaf Plate -->
             <div class="plate-container">
                 <div class="banana-leaf">
-                    <!-- Leaf Veins -->
                     <div class="leaf-vein center"></div>
                     <div class="leaf-vein horizontal"></div>
-                    <div class="leaf-vein side side-1"></div>
-                    <div class="leaf-vein side side-2"></div>
-                    <div class="leaf-vein side side-3"></div>
-                    <div class="leaf-vein side side-4"></div>
-                    <div class="leaf-vein side side-5"></div>
-                    <div class="leaf-vein side side-6"></div>
-                    <div class="leaf-vein side side-7"></div>
-                    <div class="leaf-vein side side-8"></div>
+                    <div class="leaf-veins-left"></div>
+                    <div class="leaf-veins-right"></div>
+                    <div class="water-drops">
+                        <span class="drop"></span>
+                        <span class="drop"></span>
+                        <span class="drop"></span>
+                    </div>
 
                     <!-- Dosa Wrapper -->
-                    <div class="dosa-wrapper">
+                    <div class="dosa-wrapper" id="dosaWrapper" style="display: none;">
                         <!-- Steam -->
                         <div class="steam-box">
                             <div class="steam"></div>
@@ -1006,39 +210,46 @@
                             <div class="steam"></div>
                         </div>
 
-                        <!-- The Dosa! -->
+                        <!-- The Dosa -->
                         <div class="dosa" id="dosa">
                             <div class="dosa-texture"></div>
                             <div class="dosa-edge"></div>
                             <div class="dosa-crispy"></div>
+                            <div class="dosa-shine"></div>
                             
-                            <!-- Rava Texture (hidden by default) -->
+                            <!-- Special Layers -->
                             <div class="rava-texture" id="ravaTexture"></div>
-                            
-                            <!-- Mysore Layer (hidden by default) -->
-                            <div class="mysore-layer" id="mysoreLayer" style="display: none;"></div>
-                            
-                            <!-- Cheese Layer (hidden by default) -->
-                            <div class="cheese-layer" id="cheeseLayer" style="display: none;">
+                            <div class="mysore-layer" id="mysoreLayer"></div>
+                            <div class="cheese-layer" id="cheeseLayer">
                                 <div class="cheese-stretch"></div>
                                 <div class="cheese-stretch"></div>
                                 <div class="cheese-stretch"></div>
                             </div>
+                            <div class="egg-layer" id="eggLayer"></div>
                             
                             <!-- Filling Container -->
                             <div class="filling-container" id="fillingContainer"></div>
                             
+                            <!-- Toppings Container -->
+                            <div class="toppings-container" id="toppingsContainer"></div>
+                            
                             <!-- Masala Fold -->
-                            <div class="masala-fold" id="masalaFold" style="display: none;"></div>
+                            <div class="masala-fold" id="masalaFold"></div>
                             
                             <!-- Bite Marks -->
-                            <div class="bite-mark" id="bite1"></div>
-                            <div class="bite-mark" id="bite2"></div>
-                            <div class="bite-mark" id="bite3"></div>
+                            <div class="bite-mark bite-1" id="bite1"></div>
+                            <div class="bite-mark bite-2" id="bite2"></div>
+                            <div class="bite-mark bite-3" id="bite3"></div>
                             
                             <!-- Filling Badge -->
                             <span class="filling-badge" id="fillingBadge">Sada Dosa</span>
                         </div>
+                    </div>
+
+                    <!-- Empty Plate Message -->
+                    <div class="empty-plate" id="emptyPlate">
+                        <span>👆</span>
+                        <p>Cook a Dosa first!</p>
                     </div>
                 </div>
             </div>
@@ -1046,73 +257,108 @@
 
         <!-- Dipping Section -->
         <div class="dipping-section">
-            <h3><span class="bounce">👇</span> Yahan Dip Karo! <span class="bounce">👇</span></h3>
+            <h3><span class="bounce">👇</span> Dip Karo! <span class="bounce">👇</span></h3>
 
             <!-- Coconut Chutney -->
             <div class="bowl coconut" data-name="Coconut" data-color="#f5f5dc">
+                <div class="bowl-shadow"></div>
                 <div class="bowl-wrap">
                     <div class="bowl-3d">
                         <div class="bowl-body">
+                            <div class="bowl-rim"></div>
                             <div class="bowl-inner">
-                                <div class="liquid"></div>
+                                <div class="liquid">
+                                    <div class="liquid-shine"></div>
+                                    <div class="liquid-wave"></div>
+                                    <div class="coconut-bits">
+                                        <span></span><span></span><span></span>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="bowl-reflection"></div>
                         </div>
                     </div>
                     <div class="dip-counter" id="coconutCount">0</div>
                 </div>
                 <div class="bowl-label">🥥 Coconut</div>
-                <div class="bowl-hindi">नारियल</div>
+                <div class="bowl-hindi">नारियल चटनी</div>
             </div>
 
             <!-- Tomato Chutney -->
             <div class="bowl tomato" data-name="Tomato" data-color="#ff6347">
+                <div class="bowl-shadow"></div>
                 <div class="bowl-wrap">
                     <div class="bowl-3d">
                         <div class="bowl-body">
+                            <div class="bowl-rim"></div>
                             <div class="bowl-inner">
-                                <div class="liquid"></div>
+                                <div class="liquid">
+                                    <div class="liquid-shine"></div>
+                                    <div class="liquid-wave"></div>
+                                    <div class="tomato-seeds">
+                                        <span></span><span></span>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="bowl-reflection"></div>
                         </div>
                     </div>
                     <div class="dip-counter" id="tomatoCount">0</div>
                 </div>
                 <div class="bowl-label">🍅 Tomato</div>
-                <div class="bowl-hindi">टमाटर</div>
+                <div class="bowl-hindi">टमाटर चटनी</div>
             </div>
 
             <!-- Pudina Chutney -->
             <div class="bowl pudina" data-name="Pudina" data-color="#32cd32">
+                <div class="bowl-shadow"></div>
                 <div class="bowl-wrap">
                     <div class="bowl-3d">
                         <div class="bowl-body">
+                            <div class="bowl-rim"></div>
                             <div class="bowl-inner">
-                                <div class="liquid"></div>
+                                <div class="liquid">
+                                    <div class="liquid-shine"></div>
+                                    <div class="liquid-wave"></div>
+                                    <div class="mint-leaves">
+                                        <span>🌿</span>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="bowl-reflection"></div>
                         </div>
                     </div>
                     <div class="dip-counter" id="pudinaCount">0</div>
                 </div>
                 <div class="bowl-label">🌿 Pudina</div>
-                <div class="bowl-hindi">पुदीना</div>
+                <div class="bowl-hindi">पुदीना चटनी</div>
             </div>
 
             <!-- Sambar -->
             <div class="bowl sambar" data-name="Sambar" data-color="#d2691e">
+                <div class="bowl-shadow"></div>
                 <div class="bowl-wrap">
                     <div class="bowl-3d">
                         <div class="bowl-body">
+                            <div class="bowl-rim"></div>
                             <div class="bowl-inner">
                                 <div class="liquid">
+                                    <div class="liquid-shine"></div>
+                                    <div class="liquid-wave"></div>
                                     <div class="sambar-veggies">
                                         <span class="veggie">🥕</span>
                                         <span class="veggie">🧅</span>
                                         <span class="veggie">🍅</span>
                                         <span class="veggie">🌿</span>
-                                        <span class="veggie">🥬</span>
                                         <span class="veggie">🫛</span>
+                                        <span class="veggie">🥬</span>
+                                    </div>
+                                    <div class="sambar-steam">
+                                        <span></span><span></span><span></span>
                                     </div>
                                 </div>
                             </div>
+                            <div class="bowl-reflection"></div>
                         </div>
                     </div>
                     <div class="dip-counter" id="sambarCount">0</div>
@@ -1124,527 +370,44 @@
     </div>
 
     <!-- Love Section -->
-    <section style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); padding: 4rem 2rem; text-align: center;">
-        <div style="font-size: 4rem; animation: heartbeat 1s infinite;">💕</div>
-        <h2 style="color: #8b4513; font-size: 2.5rem; margin: 1rem 0;">For My Cutie!</h2>
-        <p style="color: #666; font-size: 1.3rem; max-width: 600px; margin: 0 auto; line-height: 2;">
+    <section class="love-section">
+        <div class="love-emoji-big">💕</div>
+        <h2>For My Cutie!</h2>
+        <p class="love-message">
             "Jaise dosa ko chutney complete karti hai,<br>
             waise tu meri life complete karti hai!<br><br>
             Sambar ki garmahat jaisi hai teri smile,<br>
             Tere saath har pal lagta hai worthwhile! 🥘❤️"
         </p>
-        <div style="font-size: 4rem; animation: heartbeat 1s infinite; animation-delay: 0.5s;">😘</div>
+        <div class="love-emoji-big">😘</div>
     </section>
 
     <!-- Footer -->
-    <footer style="background: linear-gradient(135deg, #8b4513, #654321); color: white; text-align: center; padding: 2rem;">
-        <p style="font-size: 1.5rem;">🥘 Dosa Love Game 🥘</p>
-        <p>Made with <span style="animation: heartbeat 1s infinite; display: inline-block;">❤️</span> by someone who loves you!</p>
+    <footer class="footer">
+        <p class="footer-title">🥘 Dosa Love Game 🥘</p>
+        <p>Made with <span class="footer-heart">❤️</span> by someone who loves you!</p>
+        <p class="footer-sub">Jab bhi yaad aaye, khel lena! 😊</p>
     </footer>
 
     <!-- Popup Overlay -->
-    <div id="popupOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 2999; opacity: 0; pointer-events: none; transition: opacity 0.3s;"></div>
+    <div class="popup-overlay" id="popupOverlay"></div>
 
     <!-- Message Popup -->
-    <div id="messagePopup" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: var(--card-bg); padding: 2.5rem; border-radius: 30px; text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.4); z-index: 3000; transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);">
-        <span id="popupEmoji" style="font-size: 5rem; display: block; margin-bottom: 1rem;">😋</span>
-        <h2 id="popupTitle" style="color: var(--text-primary); font-size: 2rem; margin-bottom: 0.5rem;">Yummy!</h2>
-        <p id="popupMessage" style="color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 1.5rem;">Perfect Dip!</p>
-        <button onclick="closePopup()" style="background: linear-gradient(45deg, #ff6b6b, #feca57); color: white; border: none; padding: 1rem 2.5rem; border-radius: 30px; cursor: pointer; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; box-shadow: 0 8px 25px rgba(255,107,107,0.4);">Aur Khao! 🥘</button>
+    <div class="message-popup" id="messagePopup">
+        <span class="popup-emoji" id="popupEmoji">😋</span>
+        <h2 class="popup-title" id="popupTitle">Yummy!</h2>
+        <p class="popup-msg" id="popupMessage">Perfect Dip!</p>
+        <button class="popup-btn" onclick="closePopup()">Aur Khao! 🥘</button>
     </div>
 
-    <script>
-        // ========== VARIABLES ==========
-        const dosa = document.getElementById('dosa');
-        const fillingBadge = document.getElementById('fillingBadge');
-        const fillingContainer = document.getElementById('fillingContainer');
-        const bowls = document.querySelectorAll('.bowl');
-        const bgMusic = document.getElementById('bgMusic');
-        
-        let totalDips = 0;
-        let yummyPoints = 0;
-        let currentDosaType = 'plain';
-        let isMusicPlaying = false;
-        let soundEnabled = true;
-        let isDarkMode = false;
-        let loveLevel = 1;
-        let loveMeter = 0;
-        let comboCount = 0;
-        let bestCombo = 0;
-        let lastDipType = '';
-        let comboTimer = null;
-        let biteCount = 0;
-        let badgeCount = 0;
-        
-        let dipCounts = { coconut: 0, tomato: 0, pudina: 0, sambar: 0 };
-        let achievements = {};
+    <!-- Challenge Result Popup -->
+    <div class="challenge-result" id="challengeResult">
+        <span class="result-emoji">🏆</span>
+        <h2>Time Up!</h2>
+        <p>You scored: <span id="finalScore">0</span> dips!</p>
+        <button class="popup-btn" onclick="closeChallengeResult()">Play Again! 🔥</button>
+    </div>
 
-        // ========== FLOATING BACKGROUND ==========
-        function createFloatingBg() {
-            const container = document.getElementById('floatingBg');
-            const items = ['❤️', '💕', '🥘', '🥥', '🍅', '🌿', '✨', '💛', '🧡'];
-            for (let i = 0; i < 20; i++) {
-                const item = document.createElement('div');
-                item.className = 'floating-item';
-                item.textContent = items[Math.floor(Math.random() * items.length)];
-                item.style.left = Math.random() * 100 + '%';
-                item.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
-                item.style.animationDelay = Math.random() * 20 + 's';
-                item.style.animationDuration = (18 + Math.random() * 10) + 's';
-                container.appendChild(item);
-            }
-        }
-        createFloatingBg();
-
-        // ========== DOSA TYPE SELECTOR ==========
-        document.querySelectorAll('.dosa-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.dosa-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentDosaType = btn.dataset.type;
-                fillingBadge.textContent = btn.dataset.name;
-                updateDosaFilling(currentDosaType);
-                
-                // Reset bite marks
-                biteCount = 0;
-                document.querySelectorAll('.bite-mark').forEach(b => b.classList.remove('show'));
-                
-                // Bounce effect
-                dosa.style.transform = 'scale(1.15)';
-                setTimeout(() => dosa.style.transform = '', 200);
-            });
-        });
-
-        // ========== UPDATE DOSA FILLING ==========
-        function updateDosaFilling(type) {
-            // Reset all
-            fillingContainer.innerHTML = '';
-            fillingContainer.classList.remove('show');
-            document.getElementById('ravaTexture').classList.remove('show');
-            document.getElementById('mysoreLayer').style.display = 'none';
-            document.getElementById('cheeseLayer').style.display = 'none';
-            document.getElementById('masalaFold').style.display = 'none';
-            dosa.classList.remove('paper-style');
-
-            switch(type) {
-                case 'aloo':
-                    // Aloo pieces
-                    for (let i = 0; i < 8; i++) {
-                        const aloo = document.createElement('div');
-                        aloo.className = 'aloo-piece';
-                        aloo.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
-                        fillingContainer.appendChild(aloo);
-                    }
-                    fillingContainer.classList.add('show');
-                    document.getElementById('masalaFold').style.display = 'block';
-                    break;
-
-                case 'paneer':
-                    // Paneer + Aloo
-                    for (let i = 0; i < 5; i++) {
-                        const paneer = document.createElement('div');
-                        paneer.className = 'paneer-cube';
-                        paneer.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
-                        fillingContainer.appendChild(paneer);
-                    }
-                    for (let i = 0; i < 4; i++) {
-                        const aloo = document.createElement('div');
-                        aloo.className = 'aloo-piece';
-                        aloo.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
-                        fillingContainer.appendChild(aloo);
-                    }
-                    fillingContainer.classList.add('show');
-                    document.getElementById('masalaFold').style.display = 'block';
-                    break;
-
-                case 'cheese':
-                    document.getElementById('cheeseLayer').style.display = 'block';
-                    break;
-
-                case 'mysore':
-                    document.getElementById('mysoreLayer').style.display = 'block';
-                    for (let i = 0; i < 6; i++) {
-                        const aloo = document.createElement('div');
-                        aloo.className = 'aloo-piece';
-                        aloo.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
-                        fillingContainer.appendChild(aloo);
-                    }
-                    fillingContainer.classList.add('show');
-                    document.getElementById('masalaFold').style.display = 'block';
-                    break;
-
-                case 'paper':
-                    dosa.classList.add('paper-style');
-                    break;
-
-                case 'rava':
-                    document.getElementById('ravaTexture').classList.add('show');
-                    break;
-
-                case 'onion':
-                    for (let i = 0; i < 10; i++) {
-                        const onion = document.createElement('div');
-                        onion.className = 'onion-piece';
-                        onion.style.transform = `rotate(${Math.random() * 180}deg)`;
-                        fillingContainer.appendChild(onion);
-                    }
-                    fillingContainer.classList.add('show');
-                    break;
-            }
-        }
-
-        // ========== DRAG AND DROP ==========
-        let isDragging = false;
-        let startX, startY, initialX, initialY;
-
-        dosa.addEventListener('mousedown', startDrag);
-        dosa.addEventListener('touchstart', startDrag, { passive: false });
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('touchmove', drag, { passive: false });
-        document.addEventListener('mouseup', endDrag);
-        document.addEventListener('touchend', endDrag);
-
-        function startDrag(e) {
-            isDragging = true;
-            dosa.classList.add('dragging');
-            
-            if (e.type === 'touchstart') {
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-            } else {
-                startX = e.clientX;
-                startY = e.clientY;
-            }
-            
-            const rect = dosa.getBoundingClientRect();
-            initialX = rect.left;
-            initialY = rect.top;
-            
-            dosa.style.position = 'fixed';
-            dosa.style.left = initialX + 'px';
-            dosa.style.top = initialY + 'px';
-            dosa.style.zIndex = '1000';
-        }
-
-        function drag(e) {
-            if (!isDragging) return;
-            e.preventDefault();
-            
-            let currentX, currentY;
-            if (e.type === 'touchmove') {
-                currentX = e.touches[0].clientX;
-                currentY = e.touches[0].clientY;
-            } else {
-                currentX = e.clientX;
-                currentY = e.clientY;
-            }
-            
-            dosa.style.left = (initialX + currentX - startX) + 'px';
-            dosa.style.top = (initialY + currentY - startY) + 'px';
-        }
-
-        function endDrag(e) {
-            if (!isDragging) return;
-            isDragging = false;
-            dosa.classList.remove('dragging');
-            
-            const dosaRect = dosa.getBoundingClientRect();
-            const centerX = dosaRect.left + dosaRect.width / 2;
-            const centerY = dosaRect.top + dosaRect.height / 2;
-            
-            bowls.forEach(bowl => {
-                const bowlRect = bowl.getBoundingClientRect();
-                if (centerX >= bowlRect.left && centerX <= bowlRect.right && 
-                    centerY >= bowlRect.top && centerY <= bowlRect.bottom) {
-                    handleDip(bowl);
-                }
-            });
-            
-            resetDosa();
-        }
-
-        function resetDosa() {
-            dosa.style.position = 'relative';
-            dosa.style.left = '';
-            dosa.style.top = '';
-            dosa.style.zIndex = '10';
-        }
-
-        // ========== HANDLE DIP ==========
-        function handleDip(bowl) {
-            const bowlType = bowl.classList[1];
-            const bowlColor = bowl.dataset.color;
-            
-            // Play sound
-            if (soundEnabled) {
-                try { document.getElementById('dipSound').cloneNode().play(); } catch(e) {}
-            }
-            
-            // Combo logic
-            if (lastDipType && lastDipType !== bowlType) {
-                comboCount++;
-                if (comboCount > bestCombo) {
-                    bestCombo = comboCount;
-                    document.getElementById('bestCombo').textContent = bestCombo + 'x';
-                }
-                showCombo();
-            } else if (lastDipType === bowlType) {
-                comboCount = 0;
-            }
-            lastDipType = bowlType;
-            
-            clearTimeout(comboTimer);
-            comboTimer = setTimeout(() => { comboCount = 0; lastDipType = ''; }, 3000);
-            
-            // Points
-            let points = bowlType === 'sambar' ? 15 : 10;
-            points += comboCount * 5;
-            
-            dipCounts[bowlType]++;
-            totalDips++;
-            yummyPoints += points;
-            
-            // Love meter
-            loveMeter += 3;
-            if (loveMeter >= 100) {
-                loveMeter = 0;
-                loveLevel++;
-                document.getElementById('loveLevel').textContent = loveLevel;
-                showAchievement('💕', 'Love Level ' + loveLevel + '!');
-            }
-            document.getElementById('loveFill').style.height = loveMeter + '%';
-            
-            // Update UI
-            document.getElementById(`${bowlType}Count`).textContent = dipCounts[bowlType];
-            document.getElementById('totalDips').textContent = totalDips;
-            document.getElementById('yummyPoints').textContent = yummyPoints;
-            
-            // Animations
-            bowl.classList.add('dipping');
-            setTimeout(() => bowl.classList.remove('dipping'), 600);
-            
-            createSplash(bowl, bowlColor);
-            showYummyText(bowl, points);
-            addBiteMark();
-            
-            checkAchievements();
-            
-            // Show popup every 5 dips
-            if (totalDips % 5 === 0) {
-                const msgs = getRandomMessage(bowlType);
-                setTimeout(() => showPopup(msgs.emoji, msgs.title, msgs.msg), 400);
-            }
-        }
-
-        // Click on bowl
-        bowls.forEach(bowl => {
-            bowl.addEventListener('click', () => handleDip(bowl));
-        });
-
-        // ========== BITE MARKS ==========
-        function addBiteMark() {
-            if (biteCount < 3) {
-                document.getElementById('bite' + (biteCount + 1)).classList.add('show');
-                biteCount++;
-            }
-        }
-
-        // ========== EFFECTS ==========
-        function createSplash(bowl, color) {
-            const rect = bowl.getBoundingClientRect();
-            for (let i = 0; i < 12; i++) {
-                const splash = document.createElement('div');
-                splash.style.cssText = `
-                    position: fixed;
-                    width: 10px;
-                    height: 10px;
-                    background: ${color};
-                    border-radius: 50%;
-                    left: ${rect.left + rect.width/2}px;
-                    top: ${rect.top + 30}px;
-                    pointer-events: none;
-                    z-index: 3000;
-                    animation: splashAnim 0.6s ease-out forwards;
-                    --tx: ${(Math.random() - 0.5) * 100}px;
-                    --ty: ${(Math.random() - 0.5) * 100}px;
-                `;
-                document.body.appendChild(splash);
-                setTimeout(() => splash.remove(), 600);
-            }
-        }
-
-        // Add splash animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes splashAnim {
-                0% { opacity: 1; transform: scale(1) translate(0, 0); }
-                100% { opacity: 0; transform: scale(0) translate(var(--tx), var(--ty)); }
-            }
-            @keyframes yummyAnim {
-                0% { opacity: 1; transform: translateY(0) scale(1); }
-                100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        function showYummyText(bowl, points) {
-            const texts = ['Yummy!', 'Tasty!', 'Mast!', 'Wow!', '😋', '+' + points];
-            const text = texts[Math.floor(Math.random() * texts.length)];
-            
-            const yummy = document.createElement('div');
-            yummy.textContent = text;
-            yummy.style.cssText = `
-                position: fixed;
-                left: ${bowl.getBoundingClientRect().left + 20}px;
-                top: ${bowl.getBoundingClientRect().top}px;
-                font-size: 2rem;
-                font-weight: 900;
-                color: #ff6b6b;
-                pointer-events: none;
-                z-index: 3000;
-                animation: yummyAnim 1s ease-out forwards;
-            `;
-            document.body.appendChild(yummy);
-            setTimeout(() => yummy.remove(), 1000);
-        }
-
-        function showCombo() {
-            const comboPopup = document.getElementById('comboPopup');
-            comboPopup.textContent = '🔥 ' + (comboCount + 1) + 'x COMBO!';
-            comboPopup.classList.add('show');
-            setTimeout(() => comboPopup.classList.remove('show'), 2000);
-        }
-
-        // ========== ACHIEVEMENTS ==========
-        function checkAchievements() {
-            if (totalDips === 1 && !achievements.first) {
-                achievements.first = true;
-                badgeCount++;
-                showAchievement('🎉', 'First Dip!');
-            }
-            if (totalDips === 10 && !achievements.ten) {
-                achievements.ten = true;
-                badgeCount++;
-                showAchievement('⭐', '10 Dips!');
-            }
-            if (totalDips === 50 && !achievements.fifty) {
-                achievements.fifty = true;
-                badgeCount++;
-                showAchievement('👑', 'Dosa King!');
-                createConfetti();
-            }
-            if (bestCombo >= 5 && !achievements.combo) {
-                achievements.combo = true;
-                badgeCount++;
-                showAchievement('🔥', 'Combo Master!');
-            }
-            document.getElementById('badgeCount').textContent = badgeCount;
-        }
-
-        function showAchievement(icon, text) {
-            const popup = document.getElementById('achievementPopup');
-            popup.querySelector('.badge-icon').textContent = icon;
-            popup.querySelector('.badge-text').textContent = text;
-            popup.classList.add('show');
-            setTimeout(() => popup.classList.remove('show'), 3000);
-        }
-
-        function createConfetti() {
-            const emojis = ['🎉', '🎊', '✨', '💕', '🥘', '⭐'];
-            for (let i = 0; i < 40; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                    confetti.style.cssText = `
-                        position: fixed;
-                        top: -20px;
-                        left: ${Math.random() * 100}%;
-                        font-size: ${1 + Math.random() * 1.5}rem;
-                        pointer-events: none;
-                        z-index: 4000;
-                        animation: confettiFall 3s ease-out forwards;
-                    `;
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 3000);
-                }, i * 50);
-            }
-        }
-
-        // Confetti animation
-        const confettiStyle = document.createElement('style');
-        confettiStyle.textContent = `
-            @keyframes confettiFall {
-                0% { opacity: 1; transform: translateY(0) rotate(0deg); }
-                100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
-            }
-        `;
-        document.head.appendChild(confettiStyle);
-
-        // ========== MESSAGES ==========
-        function getRandomMessage(type) {
-            const messages = {
-                coconut: [{ emoji: "🥥", title: "Coconut!", msg: "Creamy aur refreshing!" }],
-                tomato: [{ emoji: "🍅", title: "Tomato!", msg: "Tangy aur spicy!" }],
-                pudina: [{ emoji: "🌿", title: "Pudina!", msg: "Fresh mint magic!" }],
-                sambar: [{ emoji: "🥘", title: "Sambar!", msg: "Full South Indian!" }]
-            };
-            return messages[type][0];
-        }
-
-        function showPopup(emoji, title, msg) {
-            document.getElementById('popupEmoji').textContent = emoji;
-            document.getElementById('popupTitle').textContent = title;
-            document.getElementById('popupMessage').textContent = msg;
-            document.getElementById('popupOverlay').style.opacity = '1';
-            document.getElementById('popupOverlay').style.pointerEvents = 'all';
-            document.getElementById('messagePopup').style.transform = 'translate(-50%, -50%) scale(1)';
-        }
-
-        function closePopup() {
-            document.getElementById('popupOverlay').style.opacity = '0';
-            document.getElementById('popupOverlay').style.pointerEvents = 'none';
-            document.getElementById('messagePopup').style.transform = 'translate(-50%, -50%) scale(0)';
-        }
-
-        // ========== CONTROLS ==========
-        function toggleMusic() {
-            if (isMusicPlaying) {
-                bgMusic.pause();
-                document.getElementById('musicBtn').textContent = '🎵';
-                document.getElementById('musicBtn').classList.remove('active');
-            } else {
-                bgMusic.play();
-                document.getElementById('musicBtn').textContent = '🎶';
-                document.getElementById('musicBtn').classList.add('active');
-            }
-            isMusicPlaying = !isMusicPlaying;
-        }
-
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
-        }
-
-        function toggleTheme() {
-            isDarkMode = !isDarkMode;
-            if (isDarkMode) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                document.getElementById('themeBtn').textContent = '☀️';
-            } else {
-                document.documentElement.removeAttribute('data-theme');
-                document.getElementById('themeBtn').textContent = '🌙';
-            }
-        }
-
-        // Check saved theme
-        if (localStorage.getItem('theme') === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            document.getElementById('themeBtn').textContent = '☀️';
-            isDarkMode = true;
-        }
-
-        console.log('%c🥘 Dosa Love Game 🥘', 'font-size: 30px; color: #8b4513;');
-        console.log('%cMade with ❤️ for Cutie!', 'font-size: 16px; color: #ff6b6b;');
-    </script>
+    <script src="script.js"></script>
 </body>
-                </html>
+                                                      </html>
