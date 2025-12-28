@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🥘 Dosa Love - Made with ❤️ for You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe4c4 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Floating Food Particles */
+        .particle {
+            position: fixed;
+            font-size: 2rem;
+            animation: float 15s infinite;
+            opacity: 0.6;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #d4a574, #8b4513, #d4a574);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient 3s ease infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .heart {
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+            color: #ff6b6b;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .dosa-hero {
+            font-size: 8rem;
+            animation: bounce 2s infinite;
+            margin: 2rem 0;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            animation: scrollBounce 2s infinite;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #8b4513;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #d4a574, #8b4513);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* Dosa Cards */
+        .dosa-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .dosa-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(139, 69, 19, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dosa-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 60px rgba(139, 69, 19, 0.25);
+        }
+
+        .dosa-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb);
+        }
+
+        .dosa-image {
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 6rem;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dosa-image::after {
+            content: '✨';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            animation: sparkle 1.5s infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .dosa-content {
+            padding: 1.5rem;
+        }
+
+        .dosa-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #8b4513;
+            margin-bottom: 0.5rem;
+        }
+
+        .dosa-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .dosa-rating {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .star {
+            color: #feca57;
+            font-size: 1.2rem;
+        }
+
+        .dosa-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #fff5e6, #ffe4c4);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #8b4513;
+            font-weight: 500;
+        }
+
+        /* Chutney Section */
+        .chutney-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 4rem 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chutney-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .chutney-section .section-title {
+            color: white;
+        }
+
+        .chutney-section .section-title::after {
+            background: linear-gradient(90deg, #feca57, #ff6b6b);
+        }
+
+        .chutney-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chutney-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chutney-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+        }
+
+        .chutney-card:nth-child(even):hover {
+            transform: translateY(-10px) rotate(-2deg);
+        }
+
+        .chutney-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: block;
+            animation: wiggle 2s infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .chutney-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #764ba2;
+            margin-bottom: 0.5rem;
+        }
+
+        .chutney-desc {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .chutney-color {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 1rem auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Love Message Section */
+        .love-section {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .love-message {
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.3rem;
+            color: #8b4513;
+            line-height: 1.8;
+        }
+
+        .love-emoji {
+            font-size: 3rem;
+            display: block;
+            margin: 1rem 0;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        /* Special Combo Section */
+        .combo-section {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .combo-section .section-title {
+            color: white;
+        }
+
+        .combo-section .section-title::after {
+            background: linear-gradient(90deg, #fff, #feca57);
+        }
+
+        .combo-box {
+            background: white;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 30px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .combo-items {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 4rem;
+            margin-bottom: 2rem;
+        }
+
+        .plus {
+            font-size: 2rem;
+            color: #11998e;
+            font-weight: bold;
+        }
+
+        .combo-title {
+            font-size: 1.8rem;
+            color: #11998e;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .combo-desc {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Order Button */
+        .order-btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .order-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background: #8b4513;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer a {
+            color: #feca57;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .dosa-hero {
+                font-size: 5rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div class="particle" style="left: 10%; animation-delay: 0s;">🥘</div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;">🌶️</div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;">🥥</div>
+    <div class="particle" style="left: 40%; animation-delay: 1s;">💚</div>
+    <div class="particle" style="left: 50%; animation-delay: 3s;">🍃</div>
+    <div class="particle" style="left: 60%; animation-delay: 5s;">❤️</div>
+    <div class="particle" style="left: 70%; animation-delay: 2.5s;">🥔</div>
+    <div class="particle" style="left: 80%; animation-delay: 4.5s;">🧀</div>
+    <div class="particle" style="left: 90%; animation-delay: 1.5s;">✨</div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="hero-title">Dosa Love 🥘</h1>
+        <p class="hero-subtitle">Made with <span class="heart">❤️</span> for my Cutie</p>
+        <div class="dosa-hero">🥘</div>
+        <p style="font-size: 1.2rem; color: #8b4513;">
+            Jab bhi tujhe bhook lage, yahan aa jaana! 😋
+        </p>
+        <div class="scroll-indicator">👇</div>
+    </section>
+
+    <!-- Dosa Varieties -->
+    <section class="section">
+        <h2 class="section-title">🥘 Dosa Varieties</h2>
+        <div class="dosa-grid">
+            
+            <!-- Plain Dosa -->
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                    🥘
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">Plain Dosa (Sada Dosa)</h3>
+                    <div class="dosa-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="dosa-description">
+                        Crispy, golden brown, simple aur tasty! 
+                        Bas fermented batter se bana, bilkul classic South Indian style. 
+                        Sambhar aur chutney ke saath perfect hai! 😍
+                    </p>
+                    <div class="dosa-tags">
+                        <span class="tag">🌱 Veg</span>
+                        <span class="tag">🔥 Crispy</span>
+                        <span class="tag">💛 Classic</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aloo Dosa -->
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);">
+                    🥔🥘
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">Aloo Masala Dosa</h3>
+                    <div class="dosa-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="dosa-description">
+                        Andar mein spicy aloo ki sabzi, 
+                        bahar se crispy dosa! Pyaaz, curry leaves, 
+                        aur haldi ke saath bana masala - ekdum mast! 🔥
+                    </p>
+                    <div class="dosa-tags">
+                        <span class="tag">🥔 Potato</span>
+                        <span class="tag">🌶️ Spicy</span>
+                        <span class="tag">👑 Popular</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paneer Aloo Dosa -->
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    🧀🥔🥘
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">Paneer Aloo Dosa</h3>
+                    <div class="dosa-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="dosa-description">
+                        Aloo masala mein soft paneer cubes! 
+                        Creamy + Spicy = Perfect combo! 
+                        Tere jaise cutie ke liye perfect hai ye! 😘
+                    </p>
+                    <div class="dosa-tags">
+                        <span class="tag">🧀 Paneer</span>
+                        <span class="tag">🥔 Aloo</span>
+                        <span class="tag">💜 Premium</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cheese Dosa -->
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    🧀🥘
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">Cheese Dosa</h3>
+                    <div class="dosa-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="dosa-description">
+                        Melting cheese ke saath hot dosa! 
+                        Cheesy, gooey, aur bohot yummy! 
+                        Cheese lovers ke liye heaven! 🤤
+                    </p>
+                    <div class="dosa-tags">
+                        <span class="tag">🧀 Extra Cheese</span>
+                        <span class="tag">😋 Cheesy</span>
+                        <span class="tag">❤️ Favourite</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mysore Masala Dosa -->
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);">
+                    🌶️🥘
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">Mysore Masala Dosa</h3>
+                    <div class="dosa-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="dosa-description">
+                        Special red chutney spread inside! 
+                        Spicy, crispy aur full of flavour! 
+                        Mysore ki shaan! 🔥🔥
+                    </p>
+                    <div class="dosa-tags">
+                        <span class="tag">🌶️ Extra Spicy</span>
+                        <span class="tag">🔴 Red Chutney</span>
+                        <span class="tag">🏆 Special</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paper Dosa -->
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #c2e59c 0%, #64b3f4 100%);">
+                    📜🥘
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">Paper Roast Dosa</h3>
+                    <div class="dosa-rating">
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                        <span class="star">⭐</span>
+                    </div>
+                    <p class="dosa-description">
+                        Paper jaisa patla, 2 feet lamba! 
+                        Super crispy aur impressive! 
+                        Insta worthy for sure! 📸
+                    </p>
+                    <div class="dosa-tags">
+                        <span class="tag">📏 Extra Long</span>
+                        <span class="tag">🔥 Super Crispy</span>
+                        <span class="tag">📸 Insta</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Chutney Section -->
+    <section class="chutney-section">
+        <h2 class="section-title">🥣 3 Special Chutneys</h2>
+        <div class="chutney-grid">
+            
+            <!-- Coconut Chutney -->
+            <div class="chutney-card">
+                <span class="chutney-icon">🥥</span>
+                <div class="chutney-color" style="background: linear-gradient(135deg, #f5f5dc, #e8e8d0);"></div>
+                <h3 class="chutney-name">Coconut Chutney</h3>
+                <p class="chutney-desc">
+                    Fresh nariyal, roasted chana dal, 
+                    green chillies aur tadka! 
+                    Creamy, mild aur refreshing! 
+                    South Indian classic! 🌴
+                </p>
+            </div>
+
+            <!-- Tomato Chutney -->
+            <div class="chutney-card">
+                <span class="chutney-icon">🍅</span>
+                <div class="chutney-color" style="background: linear-gradient(135deg, #ff6347, #dc143c);"></div>
+                <h3 class="chutney-name">Tomato Chutney</h3>
+                <p class="chutney-desc">
+                    Tangy tomatoes, red chillies, 
+                    garlic aur tamarind! 
+                    Sweet, sour aur spicy! 
+                    Ekdum perfect balance! 🔥
+                </p>
+            </div>
+
+            <!-- Green Chutney / Mint -->
+            <div class="chutney-card">
+                <span class="chutney-icon">🌿</span>
+                <div class="chutney-color" style="background: linear-gradient(135deg, #228b22, #32cd32);"></div>
+                <h3 class="chutney-name">Pudina Chutney</h3>
+                <p class="chutney-desc">
+                    Fresh mint, coriander, 
+                    green chillies aur lemon! 
+                    Refreshing aur cooling! 
+                    Garam dosa ke saath best! 💚
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Special Combo -->
+    <section class="combo-section">
+        <h2 class="section-title">🎁 Special Combo for You</h2>
+        <div class="combo-box">
+            <div class="combo-items">
+                <span>🥘</span>
+                <span class="plus">+</span>
+                <span>🥥</span>
+                <span class="plus">+</span>
+                <span>🍅</span>
+                <span class="plus">+</span>
+                <span>🌿</span>
+                <span class="plus">+</span>
+                <span>☕</span>
+            </div>
+            <h3 class="combo-title">Dosa Thali Complete!</h3>
+            <p class="combo-desc">
+                Ek crispy dosa + teeno chutneys + garam sambhar + filter coffee! 
+                <br>Bas yehi chahiye life mein! 😋
+            </p>
+            <button class="order-btn" onclick="showLove()">Order with Love 💕</button>
+        </div>
+    </section>
+
+    <!-- Love Message Section -->
+    <section class="love-section">
+        <div class="love-message">
+            <span class="love-emoji">💕</span>
+            <p>
+                "Jaise dosa ko chutney complete karti hai, 
+                <br>waise tu meri life complete karti hai! 
+                <br><br>
+                Chahe koi bhi masala ho life mein, 
+                <br>tere saath sab tasty hai! 🥘❤️"
+            </p>
+            <span class="love-emoji">😘</span>
+        </div>
+    </section>
+
+    <!-- Fun Facts -->
+    <section class="section">
+        <h2 class="section-title">🤓 Fun Dosa Facts</h2>
+        <div class="dosa-grid">
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); font-size: 4rem;">
+                    📜
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">Ancient History</h3>
+                    <p class="dosa-description">
+                        Dosa 1st century AD se hai! 
+                        Tamil Nadu aur Karnataka mein originate hua. 
+                        Itna purana aur abhi bhi favourite! 🏛️
+                    </p>
+                </div>
+            </div>
+            
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); font-size: 4rem;">
+                    🌍
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">World Famous</h3>
+                    <p class="dosa-description">
+                        Ab dosa puri duniya mein famous hai! 
+                        USA, UK, everywhere log dosa khaate hain! 
+                        Indian food ki shaan! 🇮🇳
+                    </p>
+                </div>
+            </div>
+
+            <div class="dosa-card">
+                <div class="dosa-image" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); font-size: 4rem;">
+                    💪
+                </div>
+                <div class="dosa-content">
+                    <h3 class="dosa-name">Healthy Choice</h3>
+                    <p class="dosa-description">
+                        Fermented food toh healthy hai! 
+                        Probiotics, protein, low fat! 
+                        Taste bhi, health bhi! 🥗
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p style="font-size: 1.5rem; margin-bottom: 1rem;">🥘 Made with ❤️ for my Cutie 🥘</p>
+        <p>Jab bhi miss kare, yahan aa jaana!</p>
+        <p style="margin-top: 1rem; opacity: 0.7;">
+            © 2024 Dosa Love | All rights reserved with extra chutney 😋
+        </p>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            window.scrollBy({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        });
+
+        // Order button fun
+        function showLove() {
+            const messages = [
+                "Order aa gaya! Ab tu bana ke khila de! 😋",
+                "Khaana ready! Bas tu aa ja! 💕",
+                "Love delivered! Ab milo jaldi! 🥰",
+                "Bohot bhook lagi? Main bhi! 😘",
+                "Dosa ready, tu ready? 🥘❤️"
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            alert(randomMessage);
+            
+            // Add confetti effect
+            createConfetti();
+        }
+
+        // Confetti effect
+        function createConfetti() {
+            const emojis = ['🥘', '❤️', '🥥', '🍅', '🌿', '✨', '💕'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                    confetti.style.cssText = `
+                        position: fixed;
+                        top: -50px;
+                        left: ${Math.random() * 100}%;
+                        font-size: ${Math.random() * 2 + 1}rem;
+                        z-index: 9999;
+                        pointer-events: none;
+                        animation: fall 3s ease-out forwards;
+                    `;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+
+        // Add fall animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Card hover sound effect (visual feedback)
+        document.querySelectorAll('.dosa-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-15px) scale(1.02)';
+            });
+        });
+
+        // Console easter egg
+        console.log('%c🥘 Dosa Love 🥘', 'font-size: 30px; color: #8b4513;');
+        console.log('%cMade with ❤️ for someone special!', 'font-size: 16px; color: #ff6b6b;');
+    </script>
+</body>
+  </html>
